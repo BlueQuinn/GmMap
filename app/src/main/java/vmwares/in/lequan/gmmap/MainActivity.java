@@ -18,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -34,25 +36,22 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Semaphore;
 
+import AsyncTask.NavigateAst;
 import Fragment.PlacePickerFragment;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
-        View.OnClickListener, View.OnLongClickListener {
+        View.OnClickListener, View.OnLongClickListener, GoogleMap.OnMyLocationChangeListener {
     GoogleMap map;
     Geocoder geocoder;
-    //Marker currentMarker;
-    GroundOverlay pin;
     Button btnTrack;
     Button btnDirection;
-    PlacePickerFragment fragmentPlace;
-    boolean track = true;
-    LocationManager locationManager;
-    Semaphore lock = new Semaphore(1);
-    LocationListener locationListener;
+    //PlacePickerFragment fragmentPlace;
+LatLng myLocation;
+    Marker marker;
+    ImageButton btnMenu;
+    TextView txtSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,31 +60,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
+
+
         geocoder = new Geocoder(this, Locale.getDefault());
+
         btnTrack = (Button) findViewById(R.id.btnTrack);
         btnDirection = (Button) findViewById(R.id.btnDirection);
+        btnMenu = (ImageButton) findViewById(R.id.btnMenu);
+        txtSearch = (TextView) findViewById(R.id.txtSearch);
+
         btnTrack.setOnClickListener(this);
         btnDirection.setOnClickListener(this);
-        btnTrack.setOnLongClickListener(this);
+        txtSearch.setOnClickListener(this);
+        btnMenu.setOnClickListener(this);
+
         //setSupportActionBar(toolbar);
 
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
-        fragmentPlace = (PlacePickerFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
-        fragmentPlace.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) { // Handle the selected Place
-                LatLng point = place.getLatLng();
-                //currentMarker.setPosition(point);
-                pin.setPosition(point);
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 17));
-            }
-
-            @Override
-            public void onError(Status status) { // Handle the error
-            }
-        });
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -129,17 +122,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        Log.d("123", "123");
-
-
-        GroundOverlayOptions newarkMap = new GroundOverlayOptions()
-                .image(BitmapDescriptorFactory.fromResource(R.drawable.pin))
-                .position(new LatLng(50, 6), 50f, 50f);
-        MarkerOptions a = new MarkerOptions().position(new LatLng(50, 6));
-        //currentMarker = map.addMarker(a);
-        pin =  map.addGroundOverlay(newarkMap);
-
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(14.058324, 108.277199), 16));
+        marker = map.addMarker(new MarkerOptions().position(new LatLng(0,0)));
+        marker.setVisible(false);
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(14.058324, 108.277199), 15));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -155,34 +140,40 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setMapToolbarEnabled(false);
 
-        initLocation();
-        /*map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
-                //Log.d("123", "" + track);
-
-                //if (track) {
-                    Log.d("123", "234");
-                //    track = false;
-                    LatLng point = new LatLng(location.getLatitude(), location.getLongitude());
-                    currentMarker.setPosition(point);
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(point, map.getCameraPosition().zoom));
-                //}
-            }
-        });*/
-
+        //initLocation();
+        map.setOnMyLocationChangeListener(this);
     }
 
-    void initLocation()
+    @Override
+    public void onMyLocationChange(Location location) {
+        LatLng point = new LatLng(location.getLatitude(), location.getLongitude());
+        myLocation = point;
+        //marker.setPosition(point);
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(point, map.getCameraPosition().zoom));
+        map.setOnMyLocationChangeListener(null);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                LatLng point = new LatLng(location.getLatitude(), location.getLongitude());
-                //currentMarker.setPosition(point);
-                pin.setPosition(point);
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(point, map.getCameraPosition().zoom));
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == 1 && data != null)
+        {
+            String address = data.getStringExtra("address");
+            txtSearch.setText(address);
+
+            LatLng position = data.getParcelableExtra("position");
+            marker.setPosition(position);
+            marker.setVisible(true);
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 17));
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId())
+        {
+            case R.id.btnTrack:
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
                     // here to request the missing permissions, and then overriding
@@ -192,35 +183,33 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
-                locationManager.removeUpdates(locationListener);
-            }
+                map.setOnMyLocationChangeListener(this);
+                LatLng position = myLocation;
+                try {
+                    String currentAddress = "";
+                    Address address = geocoder.getFromLocation(position.latitude, position.longitude, 1).get(0);
+                    for (int i = 0; i < address.getMaxAddressLineIndex() - 1; i++)
+                        currentAddress += address.getAddressLine(i) + ", ";
+                    currentAddress += address.getAddressLine(address.getMaxAddressLineIndex() - 1);
+                    txtSearch.setText(currentAddress);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, map.getCameraPosition().zoom));
+                break;
 
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
+            case R.id.txtSearch:
+                startActivityForResult(new Intent(this, DestinationActivity.class).putExtra("address", txtSearch.getText().toString()), 1);
+                break;
 
-            public void onProviderEnabled(String provider) {
-            }
-
-            public void onProviderDisabled(String provider) {
-            }
-        };
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+            case R.id.btnDirection:
+                Intent intent = new Intent(this, DirectionActivity.class);
+                intent.putExtra("position", map.getCameraPosition().target);
+                intent.putExtra("zoom", map.getCameraPosition().zoom);
+                startActivity(intent);
+                break;
         }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btnTrack) {
-
+        /*if (v.getId() == R.id.btnTrack) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
@@ -231,25 +220,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-
-            //LatLng position = currentMarker.getPosition();
-            LatLng position = pin.getPosition();
+            map.setOnMyLocationChangeListener(this);
+            LatLng position = myLocation;
             try {
                 String currentAddress = "";
-                Address address =geocoder.getFromLocation(position.latitude, position.longitude, 1).get(0);
+                Address address = geocoder.getFromLocation(position.latitude, position.longitude, 1).get(0);
                 for (int i = 0; i < address.getMaxAddressLineIndex() - 1; i++)
                     currentAddress += address.getAddressLine(i) + ", ";
                 currentAddress += address.getAddressLine(address.getMaxAddressLineIndex() - 1);
-                fragmentPlace.setText(currentAddress);
+                //fragmentPlace.findPlace(currentAddress);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, map.getCameraPosition().zoom));
-        }
-        else {
-startActivity(new Intent(this, DirectionActivity.class));
-        }
+        } else {
+
+        }*/
     }
 
     @Override

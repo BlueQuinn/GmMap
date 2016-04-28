@@ -15,13 +15,14 @@
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:contentInsetStart="0dp">
 
-        <fragment
+        <!--<fragment
             android:id="@+id/place_autocomplete_fragment"
             android:name="Fragment.DirectionFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp" />
-
+            android:layout_margin="10dp" />-->
+        <include layout="@layout/fragment_direction"
+            />
         </android.support.v7.widget.Toolbar>
 
     <include layout="@layout/content_main" />

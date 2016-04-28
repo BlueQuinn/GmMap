@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:padding="10dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -22,25 +23,35 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:text="asdsaasdsdadaasddassadassaddsa"
-            android:padding="4dp"
-            android:textSize="16dp"
+            android:hint="From"
+            android:textColorHint="@color/colorGray"
+            android:layout_margin="4dp"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@android:color/white"
+            android:padding="5dp"
+            android:textSize="14dp"
             android:gravity="center"
             android:layout_gravity="center"
             android:id="@+id/txtFrom"
             android:layout_weight="0.5"
             android:layout_width="match_parent"
-            android:layout_height="0dp" />
+            android:layout_height="0dp"
+            android:singleLine="true"/>
         <TextView
-            android:text="asdsaasdsdadaasddassadassaddsa"
-            android:padding="4dp"
-            android:textSize="16dp"
+            android:hint="Choose destination"
+            android:textColorHint="@color/colorGray"
+            android:layout_margin="4dp"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@android:color/white"
+            android:padding="5dp"
+            android:textSize="14dp"
             android:gravity="center"
             android:layout_gravity="center"
             android:id="@+id/txtTo"
             android:layout_weight="0.5"
             android:layout_width="match_parent"
-            android:layout_height="0dp" />
+            android:layout_height="0dp"
+            android:singleLine="true"/>
     </LinearLayout>
 
     <ImageButton

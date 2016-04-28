@@ -13,18 +13,38 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/border"
+        android:layout_height="50dp"
+        android:layout_margin="9dp"
+        android:background="@drawable/shadow"
         app:contentInsetStart="0dp">
 
-        <fragment
-            android:id="@+id/place_autocomplete_fragment"
-            android:name="Fragment.PlacePickerFragment"
+        <LinearLayout
+            android:background="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"/>
-
+            android:layout_margin="1dp">
+        <ImageButton
+            android:id="@+id/btnMenu"
+            android:src="@drawable/menu"
+            android:padding="13dp"
+android:background="@android:color/white"
+            android:scaleType="fitCenter"
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
+        <TextView
+            android:id="@+id/txtSearch"
+            android:hint="Search"
+            android:clickable="true"
+            android:gravity="center"
+            android:singleLine="true"
+            android:padding="5dp"
+            android:layout_margin="5dp"
+            android:textSize="16dp"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
@@ -39,7 +59,7 @@
             android:id="@+id/btnTrack"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_margin="3dp"
+            android:layout_margin="5dp"
             android:layout_weight="0.5"
             android:background="@drawable/location" />
 
@@ -52,7 +72,7 @@
             android:id="@+id/btnDirection"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_margin="3dp"
+            android:layout_margin="5dp"
             android:layout_weight="0.5"
             android:background="@drawable/direction" />
     </LinearLayout>
