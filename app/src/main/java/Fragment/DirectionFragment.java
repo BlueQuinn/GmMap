@@ -151,7 +151,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener
         {
             if (resultCode == -1)
             {
-                place[requestCode] =PlaceAutocomplete.getPlace(getActivity(), data);
+                place[requestCode] = PlaceAutocomplete.getPlace(getActivity(), data);
                 /*if (zzaRm != null)
                 {
                     zzaRm.onPlaceSelected(var4);

@@ -92,8 +92,8 @@ public class DirectionActivity extends AppCompatActivity
     {
         if ((requestCode == 0 || requestCode == 1) && data != null)
         {
-            String address = data.getStringExtra("address");
-            textView[requestCode].setText(address);
+            String place = data.getStringExtra("place");
+            textView[requestCode].setText(place);
 
             latLng[requestCode] = data.getParcelableExtra("position");
             if (marker[requestCode] == null)
@@ -164,7 +164,6 @@ public class DirectionActivity extends AppCompatActivity
             public void onLoaded(ArrayList<LatLng> directionPoints)
             {
                 PolylineOptions line = new PolylineOptions().width(10).color(getResources().getColor(R.color.colorPrimary));
-
                 for(int i = 0 ; i < directionPoints.size() ; i++)
                 {
                     line.add(directionPoints.get(i));

@@ -6,7 +6,7 @@
     android:background="@android:color/transparent">
 
     <ListView
-        android:id="@+id/lvContact"
+        android:id="@+id/lvDestination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

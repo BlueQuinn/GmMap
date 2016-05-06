@@ -9,23 +9,23 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import DTO.Contact;
+import DTO.Destination;
 import vmwares.in.lequan.gmmap.R;
 
 /**
  * Created by lequan on 4/23/2016.
  */
-public class ContactAdt extends ArrayAdapter<Contact>
+public class ContactAdt extends ArrayAdapter<Destination>
 {
-    ArrayList<Contact> list;
+    ArrayList<Destination> list;
     Context context;
     int resource;
-    public ContactAdt(Context context, int resource, ArrayList<Contact> listContact)
+    public ContactAdt(Context context, int resource, ArrayList<Destination> listDestination)
     {
         super(context, resource);
 
 
-        list = listContact;
+        list = listDestination;
         this.context = context;
         this.resource = resource;
     }
