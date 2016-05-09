@@ -53,7 +53,7 @@ public class Navigate
         return null;
     }
 
-    static JSONObject JsonParser(InputStream stream) throws IOException, JSONException
+    public static JSONObject JsonParser(InputStream stream) throws IOException, JSONException
     {
         BufferedReader streamReader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
         StringBuilder builder = new StringBuilder();

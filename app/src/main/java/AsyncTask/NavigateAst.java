@@ -59,11 +59,7 @@ public class NavigateAst extends AsyncTask<LatLng, Integer, ArrayList<LatLng>>
     @Override
     protected ArrayList<LatLng> doInBackground(LatLng... params)
     {
-
         return Navigate.getDirection(Navigate.getJSON(params[0], params[1], mode));
-        //Navigate.getJSON(new LatLng(10.777433, 106.677568), new LatLng(10.774086, 106.671757), "driving");
-       // Navigate.getDirection(Navigate.getJSON(new LatLng(10.777433, 106.677568), new LatLng(10.774086, 106.671757), "driving"));
-        //return null;
     }
 
 }

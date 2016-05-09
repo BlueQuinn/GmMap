@@ -1,19 +1,14 @@
 package vmwares.in.lequan.gmmap;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,16 +17,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.GroundOverlay;
-import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -39,19 +28,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.Locale;
 
-import AsyncTask.NavigateAst;
-import Fragment.PlacePickerFragment;
 import Sqlite.SqliteHelper;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
         View.OnClickListener, View.OnLongClickListener, GoogleMap.OnMyLocationChangeListener {
     GoogleMap map;
     Geocoder geocoder;
-    Button btnTrack;
-    Button btnDirection;
-    Button btnFavourite;
+    Button btnTrack, btnDirection, btnFavourite, btnPlace;
     //PlacePickerFragment fragmentPlace;
-LatLng myLocation;
+public static LatLng myLocation;
     Marker marker;
     ImageButton btnMenu;
     TextView txtSearch;
@@ -68,15 +53,19 @@ LatLng myLocation;
         btnDirection = (Button) findViewById(R.id.btnDirection);
         btnFavourite = (Button) findViewById(R.id.btnFavourite);
         btnMenu = (ImageButton) findViewById(R.id.btnMenu);
+        btnPlace = (Button) findViewById(R.id.btnPlace);
         txtSearch = (TextView) findViewById(R.id.txtSearch);
 
         btnTrack.setOnClickListener(this);
         btnDirection.setOnClickListener(this);
         btnFavourite.setOnClickListener(this);
+        btnPlace.setOnClickListener(this);
         txtSearch.setOnClickListener(this);
         btnMenu.setOnClickListener(this);
 
         initDatabase();
+
+        myLocation = new LatLng(10.762689, 106.68233989999999);
         //setSupportActionBar(toolbar);
 
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -124,16 +113,6 @@ LatLng myLocation;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
-            return true;
-        }*/
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -142,7 +121,7 @@ LatLng myLocation;
         map = googleMap;
         marker = map.addMarker(new MarkerOptions().position(new LatLng(0,0)));
         marker.setVisible(false);
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(14.058324, 108.277199), 15));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -164,10 +143,8 @@ LatLng myLocation;
 
     @Override
     public void onMyLocationChange(Location location) {
-        LatLng point = new LatLng(location.getLatitude(), location.getLongitude());
-        myLocation = point;
-        //marker.setPosition(point);
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(point, map.getCameraPosition().zoom));
+        myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, map.getCameraPosition().zoom));
         map.setOnMyLocationChangeListener(null);
     }
 
@@ -243,6 +220,13 @@ LatLng myLocation;
                     dbHelper.insert("Favourite", place, address);
                     Toast.makeText(getApplicationContext(), "Saved to Favourite", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            }
+
+            case R.id.btnPlace:
+            {
+                Intent i = new Intent(this, PlaceActivity.class);
+                startActivity(i);
                 break;
             }
         }
