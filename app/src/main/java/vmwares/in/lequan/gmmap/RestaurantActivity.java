@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import Adapter.RestaurantAdt;
 import AsyncTask.RestaurantAst;
 import DTO.Restaurant;
-import Map.OnLoadListener;
+import Listener.OnLoadListener;
 
 public class RestaurantActivity extends AppCompatActivity
         implements AdapterView.OnItemClickListener, OnLoadListener
@@ -65,8 +65,16 @@ public class RestaurantActivity extends AppCompatActivity
     public void onLoaded(Object result)
     {
         ArrayList<Restaurant> list = (ArrayList<Restaurant>) result;
-        if (list != null) {
-            for (int i = 0; i < list.size(); ++i) {
+        if (list.size() < 1)
+        {
+            tvEmpty.setVisibility(View.VISIBLE);
+            lvRestaurant.setVisibility(View.GONE);
+            return;
+        }
+        if (list != null)
+        {
+            for (int i = 0; i < list.size(); ++i)
+            {
                 listRestaurant.add(list.get(i));
             }
         }
@@ -78,7 +86,9 @@ public class RestaurantActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item)
     {
         if (item.getItemId() == android.R.id.home)
+        {
             finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 }

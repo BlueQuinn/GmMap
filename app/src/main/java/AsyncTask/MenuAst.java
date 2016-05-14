@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import DTO.Menu;
-import Map.OnLoadListener;
+import Listener.OnLoadListener;
 import Utils.UnicodeConverter;
 import vmwares.in.lequan.gmmap.R;
 

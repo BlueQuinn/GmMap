@@ -1,40 +1,34 @@
 package AsyncTask;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
-import Map.OnLoadListener;
-import Map.Navigate;
+import Listener.OnLoadListener;
+import MapAPI.Place;
+import Utils.JsonUtils;
 
 /**
- * Created by lequan on 4/22/2016.
+ * Created by lequan on 5/13/2016.
  */
-public class NavigateAst extends AsyncTask<LatLng, Integer, ArrayList<LatLng>>
+public class FindPlaceAst extends AsyncTask<Double, Integer, ArrayList<LatLng>>
 {
+    Context context;
     OnLoadListener listener;
-    String mode;
-
-    public String getMode()
-    {
-        return mode;
-    }
-
-    public void setMode(String mode)
-    {
-        this.mode = mode;
-    }
+    String type;
 
     public void setOnLoadListener(OnLoadListener listener)
     {
         this.listener = listener;
     }
 
-    public NavigateAst()
+    public FindPlaceAst(Context context, String type)
     {
-        mode = "driving";
+        this.context = context;
+        this.type = type;
     }
 
     @Override
@@ -57,9 +51,10 @@ public class NavigateAst extends AsyncTask<LatLng, Integer, ArrayList<LatLng>>
     }
 
     @Override
-    protected ArrayList<LatLng> doInBackground(LatLng... params)
+    protected ArrayList<LatLng> doInBackground(Double... params)
     {
-        return Navigate.getDirection(Navigate.getJSON(params[0], params[1], mode));
+        String url = Place.createPlaceUrlRequest(context, params[0].doubleValue(), params[1].doubleValue(), type);
+        return Place.getPlaces(JsonUtils.getJSON(url));
     }
 
 }

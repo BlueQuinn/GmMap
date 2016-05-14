@@ -16,7 +16,7 @@ import Adapter.MenuAdapter;
 import AsyncTask.MenuAst;
 import DTO.Menu;
 import DTO.Restaurant;
-import Map.OnLoadListener;
+import Listener.OnLoadListener;
 
 public class MenuActivity extends AppCompatActivity implements OnLoadListener, OnClickListener
 {

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import Adapter.ContactAdt;
 import DTO.Destination;
-import Map.OnPlaceSelectedListener;
+import Listener.OnPlaceSelectedListener;
 import vmwares.in.lequan.gmmap.R;
 
 /**

@@ -1,6 +1,5 @@
 package Fragment;
 
-import android.media.Image;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -19,51 +19,54 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-import Map.OnCloseListener;
+import Listener.OnCloseListener;
+import vmwares.in.lequan.gmmap.MainActivity;
 import vmwares.in.lequan.gmmap.R;
 
 /**
  * Created by lequan on 4/19/2016.
  */
-public class PlacePickerFragment extends Fragment {
+public class PlacePickerFragment extends Fragment implements OnClickListener
+{
 
-    private ImageButton btnBack;
-    //private View zzaRi;
+    private ImageButton btnBack, btnNearby;
     private TextView textView;
     @Nullable
-    private LatLngBounds zzaRk;
+    private LatLngBounds bounds;
     @Nullable
-    private AutocompleteFilter zzaRl;
+    private AutocompleteFilter filter;
     @Nullable
-    private PlaceSelectionListener zzaRm;
+    private PlaceSelectionListener placeListener;
 
     OnCloseListener listener;
+
     public void setOnCloseListener(OnCloseListener listener)
     {
         this.listener = listener;
     }
 
-    public PlacePickerFragment() {
+    public PlacePickerFragment()
+    {
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View var4 = inflater.inflate(R.layout.fragment_place_picker, container, false);
         btnBack = (ImageButton) var4.findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                listener.onClose();
-            }
-        });
+        btnNearby = (ImageButton) var4.findViewById(R.id.btnNearby);
+        btnBack.setOnClickListener(this);
+        btnNearby.setOnClickListener(this);
         //zzaRi = var4.findViewById(R.id.imvClose);
-        textView = (TextView)var4.findViewById(R.id.txtSearch);
-        View.OnClickListener var5 = new View.OnClickListener() {
-            public void onClick(View view) {
+        textView = (TextView) var4.findViewById(R.id.txtSearch);
+        OnClickListener var5 = new OnClickListener()
+        {
+            public void onClick(View view)
+            {
                 zzzG();
             }
         };
@@ -71,23 +74,31 @@ public class PlacePickerFragment extends Fragment {
         return var4;
     }
 
-    public void onDestroyView() {
+    public void onDestroyView()
+    {
         btnBack = null;
         //zzaRi = null;
         textView = null;
         super.onDestroyView();
     }
 
-    public void setBoundsBias(@Nullable LatLngBounds bounds) {
-        zzaRk = bounds;
+    public void setBoundsBias(@Nullable LatLngBounds bounds)
+    {
+        this.bounds = bounds;
     }
 
-    public void setFilter(@Nullable AutocompleteFilter filter) {
-        zzaRl = filter;
+    public void setFilter(@Nullable AutocompleteFilter filter)
+    {
+        this.filter = filter;
     }
 
-    public void findPlace(CharSequence text) {
+    public void findPlace(CharSequence text)
+    {
         textView.setText(text);
+        if (text.length() < 1)
+        {
+
+        }
         zzzG();
     }
 
@@ -96,52 +107,122 @@ public class PlacePickerFragment extends Fragment {
         textView.setText(text);
     }
 
-    public void setHint(CharSequence hint) {
+    public void setHint(CharSequence hint)
+    {
         textView.setHint(hint);
         btnBack.setContentDescription(hint);
     }
 
-    public void setOnPlaceSelectedListener(PlaceSelectionListener listener) {
-        zzaRm = listener;
+    public void setOnPlaceSelectedListener(PlaceSelectionListener listener)
+    {
+        placeListener = listener;
     }
 
-    void zzzG() {
+    void zzzG()
+    {
         int var1 = -1;
-
-        try {
-            Intent var2 = (new PlaceAutocomplete.IntentBuilder(2)).setBoundsBias(zzaRk).setFilter(zzaRl).zzeq(textView.getText().toString()).zzig(1).build(getActivity());
+        try
+        {
+            Intent var2 = (new PlaceAutocomplete.IntentBuilder(2)).setBoundsBias(bounds).setFilter(filter).zzeq(textView.getText().toString()).zzig(1).build(getActivity());
             startActivityForResult(var2, 1);
-        } catch (GooglePlayServicesRepairableException var3) {
+        }
+        catch (GooglePlayServicesRepairableException var3)
+        {
             var1 = var3.getConnectionStatusCode();
             Log.e("Places", "Could not open autocomplete activity", var3);
-        } catch (GooglePlayServicesNotAvailableException var4) {
+        }
+        catch (GooglePlayServicesNotAvailableException var4)
+        {
             var1 = var4.errorCode;
             Log.e("Places", "Could not open autocomplete activity", var4);
         }
 
-        if(var1 != -1) {
+        if (var1 != -1)
+        {
             GoogleApiAvailability var5 = GoogleApiAvailability.getInstance();
             var5.showErrorDialogFragment(getActivity(), var1, 2);
         }
 
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 1) {
-            if(resultCode == -1) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == 1)   // find place, address
+        {
+            if (resultCode == -1)
+            {
                 Place var4 = PlaceAutocomplete.getPlace(getActivity(), data);
-                if(zzaRm != null) {
-                    zzaRm.onPlaceSelected(var4);
+                if (placeListener != null)
+                {
+                    placeListener.onPlaceSelected(var4);
                 }
                 textView.setText(var4.getName().toString());
-            } else if(resultCode == 2) {
+            }
+            else if (resultCode == 2)
+            {
                 Status var5 = PlaceAutocomplete.getStatus(getActivity(), data);
-                if(zzaRm != null) {
-                    zzaRm.onError(var5);
+                if (placeListener != null)
+                {
+                    placeListener.onError(var5);
                 }
+            }
+        }
+        else    // find nearby
+        {
+            if (resultCode == -1) {
+                Place place = PlacePicker.getPlace(data, getActivity());
+                placeListener.onPlaceSelected(place);
             }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        if (v.getId() == R.id.btnBack)
+        {
+            listener.onClose();
+        }
+        else
+        {
+            PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(MainActivity.myLocation);
+            intentBuilder.setLatLngBounds(toBounds(MainActivity.myLocation, 400));
+            try
+            {
+                startActivityForResult(intentBuilder.build(getActivity()), 2);
+            }
+            catch (GooglePlayServicesRepairableException e)
+            {
+                e.printStackTrace();
+            }
+            catch (GooglePlayServicesNotAvailableException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    LatLngBounds toBounds(LatLng center, double radius) {
+        LatLng southwest = computeOffset(center, radius * Math.sqrt(2.0), 225);
+        LatLng northeast = computeOffset(center, radius * Math.sqrt(2.0), 45);
+        return new LatLngBounds(southwest, northeast);
+    }
+
+    static LatLng computeOffset(LatLng from, double distance, double heading) {
+        distance /= 6371009.0D;     // Earth's radius
+        heading = Math.toRadians(heading);
+        double fromLat = Math.toRadians(from.latitude);
+        double fromLng = Math.toRadians(from.longitude);
+        double cosDistance = Math.cos(distance);
+        double sinDistance = Math.sin(distance);
+        double sinFromLat = Math.sin(fromLat);
+        double cosFromLat = Math.cos(fromLat);
+        double sinLat = cosDistance * sinFromLat + sinDistance * cosFromLat * Math.cos(heading);
+        double dLng = Math.atan2(sinDistance * cosFromLat * Math.sin(heading), cosDistance - sinFromLat * sinLat);
+        return new LatLng(Math.toDegrees(Math.asin(sinLat)), Math.toDegrees(fromLng + dLng));
     }
 }

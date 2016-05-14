@@ -19,8 +19,8 @@ import Fragment.ContactFragment;
 import Fragment.FavouriteFragment;
 import Fragment.HistoryFragment;
 import Fragment.PlacePickerFragment;
-import Map.OnCloseListener;
-import Map.OnPlaceSelectedListener;
+import Listener.OnCloseListener;
+import Listener.OnPlaceSelectedListener;
 
 public class DestinationActivity extends AppCompatActivity
         implements AdapterView.OnItemClickListener, OnPlaceSelectedListener, OnCloseListener

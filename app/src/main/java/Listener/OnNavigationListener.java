@@ -1,9 +1,6 @@
-package Map;
+package Listener;
 
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.maps.model.LatLng;
-
-import java.util.ArrayList;
 
 /**
  * Created by lequan on 4/23/2016.

@@ -3,4 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="vmwares.in.lequan.gmmap.MainActivity">
 
+    <item
+        android:id="@+id/item_nearby"
+        android:title="Find nearby"
+        android:orderInCategory="1"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/item_normal"
+        android:title="Normal"
+        android:orderInCategory="1"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/item_satellite"
+        android:title="Satellite"
+        android:orderInCategory="1"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/item_terrain"
+        android:title="Terrain"
+        android:orderInCategory="1"
+        app:showAsAction="never" />
+
 </menu>

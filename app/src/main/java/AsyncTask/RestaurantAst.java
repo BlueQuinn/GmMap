@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import Map.OnLoadListener;
+import Listener.OnLoadListener;
 import Utils.UnicodeConverter;
 import vmwares.in.lequan.gmmap.R;
 

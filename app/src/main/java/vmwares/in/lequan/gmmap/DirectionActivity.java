@@ -1,8 +1,6 @@
 package vmwares.in.lequan.gmmap;
 
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
@@ -26,13 +24,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-import AsyncTask.NavigateAst;
-import Map.OnLoadListener;
-import Map.OnNavigationListener;
+import AsyncTask.DirectionAst;
+import Listener.OnLoadListener;
+import Listener.OnNavigationListener;
 
 public class DirectionActivity extends AppCompatActivity
         implements View.OnClickListener, OnMapReadyCallback, OnNavigationListener
@@ -158,7 +154,7 @@ public class DirectionActivity extends AppCompatActivity
 
     void navigate(LatLng start, LatLng end)
     {
-        NavigateAst asyncTask = new NavigateAst();
+        DirectionAst asyncTask = new DirectionAst();
         asyncTask.execute(start, end);
         asyncTask.setOnLoadListener(new OnLoadListener<ArrayList<LatLng>>()
         {
@@ -215,7 +211,7 @@ public class DirectionActivity extends AppCompatActivity
         map.addMarker(new MarkerOptions().position(start));
         map.addMarker(new MarkerOptions().position(end));
 
-        NavigateAst asyncTask = new NavigateAst();
+        DirectionAst asyncTask = new DirectionAst();
         asyncTask.execute(start, end);
         asyncTask.setOnLoadListener(new OnLoadListener<ArrayList<LatLng>>()
         {
