@@ -8,29 +8,10 @@ import java.io.Serializable;
 public class Destination implements Serializable
 {
     String name;
-    String number;
-
-    public String getNumber()
-    {
-        return number;
-    }
-
-    public void setNumber(String number)
-    {
-        this.number = number;
-    }
 
     public Destination(String name, String address)
     {
         this.name = name;
-        this.address = address;
-    }
-
-    public Destination(String name, String number, String address)
-    {
-
-        this.name = name;
-        this.number = number;
         this.address = address;
     }
 
@@ -41,19 +22,9 @@ public class Destination implements Serializable
         return name;
     }
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
     public String getAddress()
     {
         return address;
-    }
-
-    public void setAddress(String address)
-    {
-        this.address = address;
     }
 
 }

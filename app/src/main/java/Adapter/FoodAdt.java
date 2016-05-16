@@ -9,23 +9,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import DTO.Menu;
+import DTO.Food;
 import vmwares.in.lequan.gmmap.R;
 
 /**
  * Created by lequan on 2/1/2016.
  */
-public class MenuAdapter extends ArrayAdapter<Menu> {
+public class FoodAdt extends ArrayAdapter<Food> {
 
     Context context;
     int resource;
-    List<Menu> list;
+    List<Food> list;
 
-    public MenuAdapter(Context context, int resource, List<Menu> list) {
+    public FoodAdt(Context context, int resource, List<Food> list) {
         super(context, resource, list);
         this.context = context;
         this.resource = resource;
@@ -52,8 +51,6 @@ public class MenuAdapter extends ArrayAdapter<Menu> {
 
         if (list.get(position).getImage().length() > 0)
             UrlImageViewHelper.setUrlDrawable(image, list.get(position).getImage());
-        //else
-            //Picasso.with(context).load(R.drawable.food).into(image);
 
         return convertView;
     }

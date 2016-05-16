@@ -1,36 +1,26 @@
 package DTO;
 
 /**
- * Created by lequan on 5/8/2016.
+ * Created by Quan-DevTeam on 11/9/15.
  */
 public class Menu
 {
-    String food;
-    String price;
 
-    public String getFood()
-    {
-        return food;
+
+    public String getTitle() {
+        return title;
+    }
+    String title;
+    int icon;
+
+    public int getIcon() {
+        return icon;
     }
 
-    public String getPrice()
+    public Menu(String title, int icon)
     {
-        return price;
+        this.title = title;
+        this.icon = icon;
     }
-
-    public String getImage()
-    {
-        return image;
-    }
-
-    public Menu(String food, String price, String image)
-    {
-
-        this.food = food;
-        this.price = price;
-        this.image = image;
-    }
-
-    String image;
-
 }
+

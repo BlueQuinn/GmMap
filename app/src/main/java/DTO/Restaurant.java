@@ -5,39 +5,39 @@ import java.io.Serializable;
 /**
  * Created by mac on 10/13/15.
  */
-public class Restaurant implements Serializable{
-
+public class Restaurant implements Serializable
+{
     String title;
     String img;
     String address;
     String url;
 
-    public String getUrl() {
+    public String getUrl()
+    {
         return url;
     }
 
-    public Restaurant(String title, String img, String address, String url) {
+    public Restaurant(String title, String img, String address, String url)
+    {
         this.title = title;
         this.img = img;
         this.address = address;
         this.url = url;
     }
 
-    public String getAddress() {
+    public String getAddress()
+    {
         return address;
     }
 
-    public String getTitle() {
+    public String getTitle()
+    {
         return title;
     }
 
-    public String getImg() {
+    public String getImg()
+    {
         return img;
     }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
 
 }

@@ -6,19 +6,17 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
 import java.util.ArrayList;
 
-import Adapter.PlaceAdapter;
-import DTO.Place;
-import DTO.Restaurant;
+import Adapter.RestaurantSectionAdt;
+import DTO.RestaurantSection;
 
 public class PlaceActivity extends AppCompatActivity implements AdapterView.OnItemClickListener
 {
-    ArrayList<Place> list;
-    PlaceAdapter adapter;
+    ArrayList<RestaurantSection> list;
+    RestaurantSectionAdt adapter;
     GridView grid;
 
     @Override
@@ -30,18 +28,18 @@ public class PlaceActivity extends AppCompatActivity implements AdapterView.OnIt
         getSupportActionBar().setTitle("Ăn gì - Ở đâu");
 
         list = new ArrayList<>();
-        list.add(new Place("Mì, bún, phở, cháo", "mi-bun-pho-chao", R.drawable.noodle));
-        list.add(new Place("Cafe, trà sữa", "tra-sua-tra-chanh", R.drawable.drink));
-        list.add(new Place("Lẩu", "lau", R.drawable.hotpot));
-        list.add(new Place("Bánh mì, xôi", "banh-mi-xoi", R.drawable.bread));
-        list.add(new Place("Hải sản", "hai-san", R.drawable.seafood));
-        list.add(new Place("Món chay", "mon-chay", R.drawable.salad));
-        list.add(new Place("Kem, bánh ngọt", "banh-kem", R.drawable.icecream));
-        list.add(new Place("Đồ nướng", "thit-nuong-quay", R.drawable.bbq));
-        list.add(new Place("Pizza, hamburger", "pizza-hamburger", R.drawable.pizza));
-        list.add(new Place("Cơm", "com-ga-com-tam", R.drawable.rice));
+        list.add(new RestaurantSection("Mì, bún, phở, cháo", "mi-bun-pho-chao", R.drawable.noodle));
+        list.add(new RestaurantSection("Cafe, trà sữa", "tra-sua-tra-chanh", R.drawable.drink));
+        list.add(new RestaurantSection("Lẩu", "lau", R.drawable.hotpot));
+        list.add(new RestaurantSection("Bánh mì, xôi", "banh-mi-xoi", R.drawable.bread));
+        list.add(new RestaurantSection("Hải sản", "hai-san", R.drawable.seafood));
+        list.add(new RestaurantSection("Món chay", "mon-chay", R.drawable.salad));
+        list.add(new RestaurantSection("Kem, bánh ngọt", "banh-kem", R.drawable.icecream));
+        list.add(new RestaurantSection("Đồ nướng", "thit-nuong-quay", R.drawable.bbq));
+        list.add(new RestaurantSection("Pizza, hamburger", "pizza-hamburger", R.drawable.pizza));
+        list.add(new RestaurantSection("Cơm", "com-ga-com-tam", R.drawable.rice));
 
-        adapter = new PlaceAdapter(getApplicationContext(), R.layout.cell_place, list);
+        adapter = new RestaurantSectionAdt(getApplicationContext(), R.layout.cell_place, list);
         grid = (GridView) findViewById(R.id.gridPlace);
         grid.setAdapter(adapter);
         grid.setOnItemClickListener(this);

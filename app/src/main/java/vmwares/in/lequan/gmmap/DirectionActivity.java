@@ -1,6 +1,9 @@
 package vmwares.in.lequan.gmmap;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
@@ -17,6 +20,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -46,7 +51,7 @@ public class DirectionActivity extends AppCompatActivity
     TextView[] textView;
 
     LatLng[] latLng = new LatLng[2];
-    Marker marker;
+    Marker[] marker = new Marker[2];
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -87,6 +92,8 @@ public class DirectionActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap)
     {
         map = googleMap;
+        map.setContentDescription("");
+        map.setTrafficEnabled(true);
         if (place == null)
         {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, zoom));
@@ -95,8 +102,8 @@ public class DirectionActivity extends AppCompatActivity
         {
             try
             {
-                Intent var2 = (new PlaceAutocomplete.IntentBuilder(2)).zzeq(place).zzig(1).build(this);
-                startActivityForResult(var2, 3);
+                Intent intent = (new PlaceAutocomplete.IntentBuilder(2)).zzeq(place).zzig(1).build(this);
+                startActivityForResult(intent, 3);
             }
             catch (GooglePlayServicesRepairableException e)
             {
@@ -118,16 +125,34 @@ public class DirectionActivity extends AppCompatActivity
             textView[requestCode].setText(place);
 
             latLng[requestCode] = data.getParcelableExtra("position");
-            if (requestCode == 1)
+
+
+            BitmapDescriptor icon;
+            if (requestCode == 0)
             {
-                if (marker == null)
-                {
-                    marker = map.addMarker(new MarkerOptions().position(latLng[requestCode]));
-                }
-                else
-                {
-                    marker.setPosition(latLng[requestCode]);
-                }
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.car);
+            }
+            else
+            {
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.flag);
+                /*Drawable circle = getResources().getDrawable(R.drawable.marker);
+                Canvas canvas = new Canvas();
+                Bitmap bitmap = Bitmap.createBitmap(circle.getIntrinsicWidth(), circle.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                canvas.setBitmap(bitmap);
+                circle.setBounds(0, 0, circle.getIntrinsicWidth(), circle.getIntrinsicHeight());
+                circle.draw(canvas);
+                icon = BitmapDescriptorFactory.fromBitmap(bitmap);*/
+            }
+            if (marker[requestCode] == null)
+            {
+                MarkerOptions markerOptions = new MarkerOptions().position(latLng[requestCode]).icon(icon);
+                //Marker = googleMap.addMarker(markerOptions);
+                //marker[requestCode] = map.addMarker(new MarkerOptions().position(latLng[requestCode]));
+                marker[requestCode] = map.addMarker(markerOptions);
+            }
+            else
+            {
+                marker[requestCode].setPosition(latLng[requestCode]);
             }
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng[requestCode], zoom));
 
@@ -138,16 +163,31 @@ public class DirectionActivity extends AppCompatActivity
         }
         if (requestCode == 3)
         {
-            if(resultCode == -1) {
-                Place var4 = PlaceAutocomplete.getPlace(this, data);
+            if (resultCode == -1)
+            {
+                Place place = PlaceAutocomplete.getPlace(this, data);
                 textView[0].setText("my location");
-                textView[1].setText(var4.getName());
+                textView[1].setText(place.getName());
+                //latLng[0] = MainActivity.myLocation;
                 latLng[0] = new LatLng(10.762689, 106.68233989999999);
-                latLng[1] = var4.getLatLng();
-                navigate(latLng[0], latLng[1]);
-            } else if(resultCode == 2) {
-                Status var5 = PlaceAutocomplete.getStatus(this, data);
+                latLng[1] = place.getLatLng();
 
+                BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.car);
+                MarkerOptions markerOptions = new MarkerOptions().position(latLng[0]).icon(icon);
+                marker[0] = map.addMarker(markerOptions);
+
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.flag);
+                markerOptions = new MarkerOptions().position(latLng[1]).icon(icon);
+                marker[1] = map.addMarker(markerOptions);
+
+                marker[0].setPosition(latLng[0]);
+                marker[1].setPosition(latLng[1]);
+
+                navigate(latLng[0], latLng[1]);
+            }
+            else if (resultCode == 2)
+            {
+                Status var5 = PlaceAutocomplete.getStatus(this, data);
             }
         }
     }
@@ -197,8 +237,11 @@ public class DirectionActivity extends AppCompatActivity
                     String tmp = textView[0].getText().toString();
                     textView[0].setText(textView[1].getText());
                     textView[1].setText(tmp);
+                    marker[0].setPosition(latLng[1]);
+                    marker[1].setPosition(latLng[0]);
                     navigate(latLng[1], latLng[0]);
                 }
+                break;
         }
     }
 

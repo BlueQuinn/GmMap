@@ -10,12 +10,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import DTO.Place;
 import vmwares.in.lequan.gmmap.R;
 
 /**
  * Created by lequan on 5/13/2016.
  */
-public class Place
+public class PlaceAPI
 {
     public static String createPlaceUrlRequest(Context context, double latitude, double longitude, String type)
     {
@@ -27,16 +28,19 @@ public class Place
         return googlePlacesUrl.toString();
     }
 
-    public static ArrayList<LatLng> getPlaces(JSONObject object)
+    public static ArrayList<Place> getPlaces(JSONObject object)
     {
-        ArrayList<LatLng> placesList = new ArrayList<>();
+        ArrayList<Place> placesList = new ArrayList<>();
         try
         {
             JSONArray places = object.getJSONArray("results");
             for (int i = 0; i < places.length(); ++i)
             {
-                JSONObject location = places.getJSONObject(i).getJSONObject("geometry").getJSONObject("location");
-                placesList.add(new LatLng(location.getDouble("lat"), location.getDouble("lng")));            }
+                JSONObject item = places.getJSONObject(i);
+                JSONObject location = item.getJSONObject("geometry").getJSONObject("location");
+                Place place = new Place(location.getDouble("lat"), location.getDouble("lng"), item.getString("name"), item.getString("vicinity"));
+                placesList.add(place);
+            }
 
         }
         catch (JSONException e)

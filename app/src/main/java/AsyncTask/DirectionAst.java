@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 
 import Listener.OnLoadListener;
-import MapAPI.Direction;
+import MapAPI.DirectionAPI;
 import Utils.JsonUtils;
 
 /**
@@ -60,8 +60,8 @@ public class DirectionAst extends AsyncTask<LatLng, Integer, ArrayList<LatLng>>
     @Override
     protected ArrayList<LatLng> doInBackground(LatLng... params)
     {
-        String url = Direction.createDirectionUrlRequest(params[0], params[1], mode);
-        return Direction.getDirection(JsonUtils.getJSON(url));
+        String url = DirectionAPI.createDirectionUrlRequest(params[0], params[1], mode);
+        return DirectionAPI.getDirection(JsonUtils.getJSON(url));
     }
 
 }

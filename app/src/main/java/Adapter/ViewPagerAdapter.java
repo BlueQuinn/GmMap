@@ -3,6 +3,7 @@ package Adapter;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Created by lequan on 4/27/2016.
  */
-public class ViewPagerAdapter extends FragmentPagerAdapter
+public class ViewPagerAdapter extends FragmentStatePagerAdapter
 {
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();

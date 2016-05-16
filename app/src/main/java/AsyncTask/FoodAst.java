@@ -15,7 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import DTO.Menu;
+import DTO.Food;
 import Listener.OnLoadListener;
 import Utils.UnicodeConverter;
 import vmwares.in.lequan.gmmap.R;
@@ -23,17 +23,17 @@ import vmwares.in.lequan.gmmap.R;
 /**
  * Created by Quan-DevTeam on 10/8/15.
  */
-public class MenuAst extends AsyncTask<String, Integer, ArrayList<Menu>> {
+public class FoodAst extends AsyncTask<String, Integer, ArrayList<Food>> {
 
-    ProgressBar prbLoading;
-    public MenuAst(View view) {
-        prbLoading = (ProgressBar) view.findViewById(R.id.prbLoading);
+
+    public FoodAst() {
+
     }
 
     @Override
-    protected ArrayList<Menu> doInBackground(String... params)
+    protected ArrayList<Food> doInBackground(String... params)
     {
-        ArrayList<Menu> listArticle = new ArrayList<>();
+        ArrayList<Food> listArticle = new ArrayList<>();
         try {
 
             HtmlCleaner htmlCleaner = new HtmlCleaner();
@@ -60,7 +60,7 @@ public class MenuAst extends AsyncTask<String, Integer, ArrayList<Menu>> {
                 String img = (String) nodeImg[i];
                 img = img.replace("/content/images/no-image.png", "");
 
-                listArticle.add(new Menu(title, url, img));
+                listArticle.add(new Food(title, url, img));
             }
 
         } catch (MalformedURLException e) {
@@ -76,14 +76,12 @@ public class MenuAst extends AsyncTask<String, Integer, ArrayList<Menu>> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        prbLoading.setVisibility(View.VISIBLE);
     }
 
     @Override
-    protected void onPostExecute(ArrayList<Menu> album) {
+    protected void onPostExecute(ArrayList<Food> album) {
         super.onPostExecute(album);
         listener.onLoaded(album);
-        prbLoading.setVisibility(View.GONE);
     }
 
     OnLoadListener listener;

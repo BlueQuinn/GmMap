@@ -8,21 +8,23 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
-import DTO.Place;
+import DTO.RestaurantSection;
 import vmwares.in.lequan.gmmap.R;
 
 /**
  * Created by lequan on 2/1/2016.
  */
-public class PlaceAdapter extends ArrayAdapter<Place> {
+public class RestaurantSectionAdt extends ArrayAdapter<RestaurantSection> {
 
     Context context;
     int resource;
-    List<Place> list;
+    List<RestaurantSection> list;
 
-    public PlaceAdapter(Context context, int resource, List<Place> list) {
+    public RestaurantSectionAdt(Context context, int resource, List<RestaurantSection> list) {
         super(context, resource, list);
         this.context = context;
         this.resource = resource;
@@ -44,7 +46,8 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
         ImageView image = (ImageView)convertView.findViewById(R.id.imvPlace);
 
         title.setText(list.get(position).getName());
-        image.setImageResource(list.get(position).getImage());
+        Picasso.with(context).load(list.get(position).getImage()).into(image);
+        //image.setImageResource(list.get(position).getImage());
         return convertView;
     }
 

@@ -29,7 +29,6 @@ public class RestaurantAst extends AsyncTask<String, Integer, ArrayList<Restaura
 
     ProgressBar prbLoading;
 
-
     public RestaurantAst(View view) {
         prbLoading = (ProgressBar) view.findViewById(R.id.prbLoading);
     }
@@ -60,7 +59,6 @@ public class RestaurantAst extends AsyncTask<String, Integer, ArrayList<Restaura
 
             for (int i = 0; i < nodeImg.length; ++i)
             {
-
                 String title =  UnicodeConverter.convert((String) node_title[i]);
                 String url = (String) node_url[i];
                 String address = UnicodeConverter.convert(nodeAddress[i].toString());

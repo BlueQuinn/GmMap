@@ -7,14 +7,15 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
+import DTO.Place;
 import Listener.OnLoadListener;
-import MapAPI.Place;
+import MapAPI.PlaceAPI;
 import Utils.JsonUtils;
 
 /**
  * Created by lequan on 5/13/2016.
  */
-public class FindPlaceAst extends AsyncTask<Double, Integer, ArrayList<LatLng>>
+public class FindPlaceAst extends AsyncTask<Double, Integer, ArrayList<Place>>
 {
     Context context;
     OnLoadListener listener;
@@ -38,7 +39,7 @@ public class FindPlaceAst extends AsyncTask<Double, Integer, ArrayList<LatLng>>
     }
 
     @Override
-    protected void onPostExecute(ArrayList<LatLng> result)
+    protected void onPostExecute(ArrayList<Place> result)
     {
         listener.onLoaded(result);
         super.onPostExecute(result);
@@ -51,10 +52,10 @@ public class FindPlaceAst extends AsyncTask<Double, Integer, ArrayList<LatLng>>
     }
 
     @Override
-    protected ArrayList<LatLng> doInBackground(Double... params)
+    protected ArrayList<Place> doInBackground(Double... params)
     {
-        String url = Place.createPlaceUrlRequest(context, params[0].doubleValue(), params[1].doubleValue(), type);
-        return Place.getPlaces(JsonUtils.getJSON(url));
+        String url = PlaceAPI.createPlaceUrlRequest(context, params[0].doubleValue(), params[1].doubleValue(), type);
+        return PlaceAPI.getPlaces(JsonUtils.getJSON(url));
     }
 
 }

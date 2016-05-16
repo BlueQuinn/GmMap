@@ -137,6 +137,7 @@ public class UnicodeConverter
         s = s.replace("&#7844;","Ấ");
         s = s.replace("&#7841;","ạ");
         s = s.replace("&amp;","&");
+        s = s.replace("&#39;","'");
         return  s;
     }
 }

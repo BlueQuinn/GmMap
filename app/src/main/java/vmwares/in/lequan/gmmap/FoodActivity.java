@@ -8,31 +8,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import Adapter.MenuAdapter;
-import AsyncTask.MenuAst;
-import DTO.Menu;
+import Adapter.FoodAdt;
+import AsyncTask.FoodAst;
+import DTO.Food;
 import DTO.Restaurant;
 import Listener.OnLoadListener;
 
-public class MenuActivity extends AppCompatActivity implements OnLoadListener, OnClickListener
+public class FoodActivity extends AppCompatActivity implements OnLoadListener, OnClickListener
 {
     GridView gridMenu;
     TextView tvEmpty;
-    ArrayList<Menu> listMenu;
-    MenuAdapter adapter;
-    MenuAst asyncTask;
+    ArrayList<Food> listFood;
+    FoodAdt adapter;
+    FoodAst asyncTask;
     Restaurant restaurant;
     FloatingActionButton btnGo;
+    ProgressBar prbLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.activity_food);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
@@ -43,17 +45,17 @@ public class MenuActivity extends AppCompatActivity implements OnLoadListener, O
         btnGo = (FloatingActionButton) findViewById(R.id.btnGo);
         gridMenu = (GridView) findViewById(R.id.lvArticle);
         tvEmpty = (TextView) findViewById(R.id.tvEmpty);
+        prbLoading = (ProgressBar) findViewById(R.id.prbLoading);
 
+        listFood = new ArrayList<>();
 
-        listMenu = new ArrayList<>();
-
-        adapter = new MenuAdapter(getApplicationContext(), R.layout.cell_menu, listMenu);
+        adapter = new FoodAdt(getApplicationContext(), R.layout.cell_food, listFood);
         gridMenu.setAdapter(adapter);
 
 
-        asyncTask = new MenuAst(this.findViewById(android.R.id.content));
+        asyncTask = new FoodAst();
         asyncTask.setOnLoaded(this);
-        asyncTask.execute("http://www.deliverynow.vn" + restaurant.getUrl());
+        asyncTask.execute("https://www.deliverynow.vn" + restaurant.getUrl());
 
         btnGo.setOnClickListener(this);
     }
@@ -61,11 +63,17 @@ public class MenuActivity extends AppCompatActivity implements OnLoadListener, O
     @Override
     public void onLoaded(Object result)
     {
-        ArrayList<Menu> list = (ArrayList<Menu>) result;
-        if (list != null) {
-            for (int i = 0; i < list.size(); ++i) {
-                listMenu.add(list.get(i));
-            }
+        prbLoading.setVisibility(View.GONE);
+        ArrayList<Food> list = (ArrayList<Food>) result;
+        if (list.size() < 1)
+        {
+            tvEmpty.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        for (int i = 0; i < list.size(); ++i)
+        {
+            listFood.add(list.get(i));
         }
         adapter.notifyDataSetChanged();
         gridMenu.setVisibility(View.VISIBLE);
@@ -83,7 +91,9 @@ public class MenuActivity extends AppCompatActivity implements OnLoadListener, O
     public boolean onOptionsItemSelected(MenuItem item)
     {
         if (item.getItemId() == android.R.id.home)
+        {
             finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 }

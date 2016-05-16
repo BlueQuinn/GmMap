@@ -23,7 +23,7 @@ import Listener.OnCloseListener;
 import Listener.OnPlaceSelectedListener;
 
 public class DestinationActivity extends AppCompatActivity
-        implements AdapterView.OnItemClickListener, OnPlaceSelectedListener, OnCloseListener
+        implements OnPlaceSelectedListener, OnCloseListener
 {
     private TabLayout tabLayout;
     PlacePickerFragment fragmentPlace;
@@ -49,7 +49,6 @@ public class DestinationActivity extends AppCompatActivity
             public void onPlaceSelected(Place place)
             {
                 LatLng position = place.getLatLng();
-                Log.d("123", "" + position.latitude + " " + position.longitude);
 
                 historyFragment.save(place.getName().toString(), place.getAddress().toString());
 
@@ -63,22 +62,12 @@ public class DestinationActivity extends AppCompatActivity
 
             @Override
             public void onError(Status status)
-            { // Handle the error
+            {
             }
         });
 
         Intent intent = getIntent();
         fragmentPlace.setText(intent.getStringExtra("address"));
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-    {
-
-        /*Intent intent = new Intent();
-        intent.putExtra("destination", list.get(position).getAddress());
-        setResult(1, intent);
-        finish();*/
     }
 
     ContactFragment contactFragment;
@@ -95,9 +84,9 @@ public class DestinationActivity extends AppCompatActivity
         favouriteFragment.setOnPlaceSelectedListener(this);
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(contactFragment, "Contact");
-        adapter.addFragment(historyFragment, "History");
-        adapter.addFragment(favouriteFragment, "Favourite");
+        adapter.addFragment(favouriteFragment, "yêu thích");
+        adapter.addFragment(historyFragment, "gần đây");
+        adapter.addFragment(contactFragment, "danh bạ");
         viewPager.setAdapter(adapter);
     }
 

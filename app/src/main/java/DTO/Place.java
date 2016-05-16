@@ -1,34 +1,39 @@
 package DTO;
 
 /**
- * Created by lequan on 5/8/2016.
+ * Created by lequan on 5/15/2016.
  */
 public class Place
 {
-    String name;
-    String url;
+    double lat,lng;
+    String name, address;
+
+    public double getLat()
+    {
+        return lat;
+    }
+
+    public double getLng()
+    {
+        return lng;
+    }
+
     public String getName()
     {
         return name;
     }
 
-    public int getImage()
+    public String getAddress()
     {
-        return image;
+        return address;
     }
 
-    public String getUrl()
-    {
-        return url;
-    }
-
-    public Place(String name, String url, int image)
+    public Place(double lat, double lng, String name, String address)
     {
 
+        this.lat = lat;
+        this.lng = lng;
         this.name = name;
-        this.url = url;
-        this.image = image;
+        this.address = address;
     }
-
-    int image;
 }

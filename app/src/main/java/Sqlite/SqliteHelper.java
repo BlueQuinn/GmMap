@@ -1,9 +1,5 @@
 package Sqlite;
 
-/**
- * Created by apple on 9/22/15.
- */
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -21,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by apple on 9/20/15.
+ * Created by lequan on 9/20/15.
  */
 public class SqliteHelper extends SQLiteOpenHelper
 {
@@ -60,25 +56,23 @@ public class SqliteHelper extends SQLiteOpenHelper
         super.close();
     }
 
-    //check if database doesn't exist, copy into databses folder
+    //check if database doesn't exist
     public boolean checkDataBase()
     {
-        boolean checkdb = false;
+        boolean check = false;
         try
         {
-            String myPath = context.getFilesDir().getAbsolutePath().replace("files", "databases") + File.separator + DB_NAME;
-            File dbfile = new File(myPath);
-            checkdb = dbfile.exists();
+            String path = context.getFilesDir().getAbsolutePath().replace("files", "databases") + File.separator + DB_NAME;
+            check = new File(path).exists();
         }
         catch (SQLiteException e)
         {
             System.out.println("Database doesn't exist");
         }
 
-        return checkdb;
+        return check;
     }
 
-    //Create databse for my app
     public void createDataBase() throws IOException
     {
         if (!checkDataBase())
@@ -93,10 +87,8 @@ public class SqliteHelper extends SQLiteOpenHelper
         return excuteQuery("select * from " + table);
     }
 
-    //get databse for my app
     public ArrayList<HashMap<String, String>> excuteQuery(String sql)
     {
-//sql = "SELECT name FROM sqlite_master WHERE type='table'";
         ArrayList<HashMap<String, String>> listData = new ArrayList<HashMap<String, String>>();
         if (db != null)
         {
@@ -138,17 +130,9 @@ public class SqliteHelper extends SQLiteOpenHelper
         }
     }
 
-    public void insert(String table, double lat, double lng)
-    {
-       boolean a = excute(String.format("insert into %s values ('%s', '%s')", table, Double.toString(lat), Double.toString(lng)));
-    }
     public void insert(String table, String place, String address)
     {
-        boolean a = excute(String.format("insert into %s values ('%s', '%s')", table, place, address));
-    }
-    public void delete(String table, double lat, double lng)
-    {
-        db.delete(table, "Lat = ? and Lng = ?", new String[]{Double.toString(lat), Double.toString(lng)});
+        excute(String.format("insert into %s values ('%s', '%s')", table, place, address));
     }
 
     public void delete(String table, String place)

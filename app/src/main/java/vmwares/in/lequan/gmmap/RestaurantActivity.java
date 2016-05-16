@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,11 +20,12 @@ import Listener.OnLoadListener;
 public class RestaurantActivity extends AppCompatActivity
         implements AdapterView.OnItemClickListener, OnLoadListener
 {
-    GridView lvRestaurant;
+    GridView gridView;
     TextView tvEmpty;
     ArrayList<Restaurant> listRestaurant;
     RestaurantAdt adapter;
     RestaurantAst asyncTask;
+    ProgressBar prbLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -31,19 +33,20 @@ public class RestaurantActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant);
 
-        lvRestaurant = (GridView) findViewById(R.id.lvArticle);
+        gridView = (GridView) findViewById(R.id.lvArticle);
         tvEmpty = (TextView) findViewById(R.id.tvEmpty);
+        prbLoading = (ProgressBar) findViewById(R.id.prbLoading);
 
         listRestaurant = new ArrayList<>();
 
         adapter = new RestaurantAdt(getApplicationContext(), R.layout.cell_restaurant, listRestaurant);
-        lvRestaurant.setAdapter(adapter);
-        lvRestaurant.setOnItemClickListener(this);
+        gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(this);
 
 
         Intent intent = getIntent();
 
-        String url = "http://www.deliverynow.vn/ho-chi-minh/danh-sach-dia-diem-phuc-vu-" + intent.getStringExtra("url") + "-giao-tan-noi";
+        String url = "https://www.deliverynow.vn/ho-chi-minh/danh-sach-dia-diem-phuc-vu-" + intent.getStringExtra("url") + "-giao-tan-noi";
         asyncTask = new RestaurantAst(this.findViewById(android.R.id.content));
         asyncTask.setOnLoaded(this);
         asyncTask.execute(url);
@@ -56,7 +59,7 @@ public class RestaurantActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
-        Intent i = new Intent(this, MenuActivity.class);
+        Intent i = new Intent(this, FoodActivity.class);
         i.putExtra("restaurant", adapter.getItem(position));
         startActivity(i);
     }
@@ -64,22 +67,21 @@ public class RestaurantActivity extends AppCompatActivity
     @Override
     public void onLoaded(Object result)
     {
+        prbLoading.setVisibility(View.GONE);
         ArrayList<Restaurant> list = (ArrayList<Restaurant>) result;
         if (list.size() < 1)
         {
             tvEmpty.setVisibility(View.VISIBLE);
-            lvRestaurant.setVisibility(View.GONE);
             return;
         }
-        if (list != null)
+
+        for (int i = 0; i < list.size(); ++i)
         {
-            for (int i = 0; i < list.size(); ++i)
-            {
-                listRestaurant.add(list.get(i));
-            }
+            listRestaurant.add(list.get(i));
         }
+
         adapter.notifyDataSetChanged();
-        lvRestaurant.setVisibility(View.VISIBLE);
+        gridView.setVisibility(View.VISIBLE);
     }
 
     @Override

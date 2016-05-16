@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
@@ -50,14 +50,14 @@
                 android:textColorHint="@android:color/darker_gray"
                 android:textSize="16dp"/>
 
-            <!--<Spinner
+            &lt;!&ndash;<Spinner
                 android:padding="0dp"
                 android:scaleType="fitCenter"
                 android:id="@+id/planets_spinner"
                 android:layout_weight="0.1"
                 android:layout_width="0dp"
-                android:layout_height="50dp" />-->
-            <!--<ImageButton
+                android:layout_height="50dp" />&ndash;&gt;
+            &lt;!&ndash;<ImageButton
                 android:id="@+id/btnMenu"
                 android:layout_weight="0.1"
                 android:layout_width="0dp"
@@ -65,7 +65,7 @@
                 android:background="@android:color/white"
                 android:padding="6dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/menu"/>-->
+                android:src="@drawable/menu"/>&ndash;&gt;
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
@@ -125,133 +125,157 @@
             android:background="@drawable/eat"/>
     </LinearLayout>
 
-</FrameLayout>
+</FrameLayout>-->
 
 
-    <!--
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawerlayout"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/drawerlayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        android:orientation="vertical">
 
-        <FrameLayout
-            android:id="@+id/frameLayout"
+        <include layout="@layout/content_main"/>
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-
-            <include layout="@layout/content_main"/>
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="9dp"
-                android:background="@drawable/shadow"
-                app:contentInsetStart="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="1dp"
-                    android:background="@android:color/white">
-
-                    <ImageButton
-                        android:id="@+id/btnMenu"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:background="@android:color/white"
-                        android:padding="13dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/menu"/>
-
-                    <TextView
-                        android:id="@+id/txtSearch"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="5dp"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:hint="Search"
-                        android:padding="5dp"
-                        android:singleLine="true"
-                        android:textColor="@android:color/black"
-                        android:textColorHint="@android:color/darker_gray"
-                        android:textSize="16dp"/>
-                </LinearLayout>
-            </android.support.v7.widget.Toolbar>
+            android:layout_height="50dp"
+            android:layout_margin="9dp"
+            android:background="@drawable/shadow"
+            app:contentInsetStart="0dp">
 
             <LinearLayout
-                android:layout_width="45dp"
-                android:layout_height="180dp"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="5dp"
-                android:background="@drawable/shape"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp">
 
-                <Button
-                    android:id="@+id/btnTrack"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                <ImageButton
+                    android:id="@+id/btnMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="0.1"
+                    android:background="@android:color/white"
+                    android:padding="6dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/menu"/>
+
+                <TextView
+                    android:id="@+id/txtSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_margin="5dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/location"/>
+                    android:layout_weight="0.8"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:hint="Tìm kiếm"
+                    android:padding="5dp"
+                    android:singleLine="true"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/darker_gray"
+                    android:textSize="16dp"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@android:color/white"/>
+                <ImageButton
+                    android:id="@+id/btnVoice"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="0.1"
+                    android:background="@android:color/white"
+                    android:padding="6dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/micro"/>
 
-                <Button
-                    android:id="@+id/btnDirection"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/direction"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@android:color/white"/>
-
-                <Button
-                    android:id="@+id/btnFavourite"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/favourite"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@android:color/white"/>
-
-                <Button
-                    android:id="@+id/btnPlace"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/eat"/>
             </LinearLayout>
+        </android.support.v7.widget.Toolbar>
 
-        </FrameLayout>
+        <!--<LinearLayout
+            android:layout_width="45dp"
+            android:layout_height="130dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnTrack"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/location"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/white"/>
+
+            <Button
+                android:id="@+id/btnDirection"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/direction"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/white"/>
+
+            <Button
+                android:id="@+id/btnFavourite"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/favourite"/>
+
+        </LinearLayout>
+-->
+<!--<LinearLayout
+    android:background="@android:color/darker_gray"
+    android:orientation="vertical"
+    android:layout_gravity="bottom|end"
+    android:layout_margin="5dp"
+    android:layout_width="55dp"
+    android:layout_height="110dp">-->
+
+<android.support.design.widget.FloatingActionButton
+    android:layout_gravity="bottom|end"
+    android:id="@+id/btnTrack"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="70dp"
+    android:src="@drawable/location"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_gravity="bottom|end"
+            android:id="@+id/btnFavourite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/favourite"/>
+
+        <include layout="@layout/progress_bar"/>
+
+    </FrameLayout>
+
+    <ExpandableListView
+        android:id="@+id/lvLeftMenu"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:background="@android:color/white"
+        android:choiceMode="singleChoice"
+        android:groupIndicator="@android:color/transparent"/>
 
 
-        <ExpandableListView
-            android:id="@+id/lvLeftMenu"
-            android:layout_width="280dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:background="@android:color/white"
-            android:choiceMode="singleChoice"
-            android:groupIndicator="@android:color/transparent"/>
 
-    </android.support.v4.widget.DrawerLayout>-->
+</android.support.v4.widget.DrawerLayout>
