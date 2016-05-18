@@ -113,7 +113,6 @@ public class SqliteHelper extends SQLiteOpenHelper
         return listData;
     }
 
-
     public boolean excute(String sql)
     {
         try
@@ -168,4 +167,10 @@ public class SqliteHelper extends SQLiteOpenHelper
         //String myPath = context.getFilesDir().getAbsolutePath().replace("files", "databases")+File.separator + DB_NAME;
         db = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
     }
+
+    public void saveLocation(double lat, double lng)
+    {
+        excute(String.format("insert into Location values (%s,%s)", Double.toString(lat), Double.toString(lng)));
+    }
+
 }

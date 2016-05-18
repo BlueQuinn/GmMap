@@ -82,8 +82,19 @@ public class FoodActivity extends AppCompatActivity implements OnLoadListener, O
     @Override
     public void onClick(View v)
     {
+        String name = restaurant.getTitle();
+        int separator = name.length();
+        for (int i = 0; i < name.length(); ++i)
+        {
+            if (name.charAt(i) == '-')
+            {
+                separator = i;
+            }
+        }
+        name = name.substring(0, separator);
+
         Intent intent = new Intent(this, DirectionActivity.class);
-        intent.putExtra("address", restaurant.getTitle());
+        intent.putExtra("restaurant", name);
         startActivity(intent);
     }
 

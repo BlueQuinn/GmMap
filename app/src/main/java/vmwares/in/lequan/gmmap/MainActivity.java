@@ -13,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -46,6 +47,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -57,13 +59,14 @@ import DTO.Menu;
 import DTO.Place;
 import Listener.OnLoadListener;
 import Sqlite.SqliteHelper;
+import Utils.AddressUtils;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
         View.OnClickListener, View.OnLongClickListener, GoogleMap.OnMyLocationChangeListener,
         ExpandableListView.OnChildClickListener
 {
     GoogleMap map;
-    Geocoder geocoder;
+
     FloatingActionButton btnTrack, btnFavourite;
     ProgressBar prbLoading;
     //PlacePickerFragment fragmentPlace;
@@ -88,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         Firebase.setAndroidContext(this);
 
-        geocoder = new Geocoder(this, Locale.getDefault());
+
 
         btnTrack = (FloatingActionButton) findViewById(R.id.btnTrack);
         btnFavourite = (FloatingActionButton) findViewById(R.id.btnFavourite);
@@ -229,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         myLocation = new LatLng(location.getLatitude(), location.getLongitude());
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, map.getCameraPosition().zoom));
         map.setOnMyLocationChangeListener(null);
+        Log.d("123", "my = " + myLocation.latitude + " " + myLocation.longitude);
     }
 
     @Override
@@ -274,33 +278,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
                 {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+                    //requestPermissions(this, "Manifest.permission.ACCESS_FINE_LOCATION", 1);
                     return;
                 }
                 map.setOnMyLocationChangeListener(this);
-                LatLng position = myLocation;
-                try
-                {
-                    String currentAddress = "";
-                    Address address = geocoder.getFromLocation(position.latitude, position.longitude, 1).get(0);
-                    for (int i = 0; i < address.getMaxAddressLineIndex() - 1; i++)
-                    {
-                        currentAddress += address.getAddressLine(i) + ", ";
-                    }
-                    currentAddress += address.getAddressLine(address.getMaxAddressLineIndex() - 1);
-                    txtSearch.setText(currentAddress);
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, map.getCameraPosition().zoom));
+
+                txtSearch.setText(AddressUtils.getAddress(new Geocoder(this, Locale.getDefault()), myLocation.latitude, myLocation.longitude));
+
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, map.getCameraPosition().zoom));
                 break;
             }
 
@@ -388,8 +373,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onLongClick(View v)
     {
-//        map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentMarker.getPosition(), map.getCameraPosition().zoom));
-
         return false;
     }
 
@@ -425,7 +408,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     case 4:
                     {
-
+                        Intent intent = new Intent(this, NotifyActivity.class);
+                        startActivity(intent);
+                        break;
                     }
                 }
                 break;
@@ -439,7 +424,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                         break;
                     case 1:
-                        map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                        map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
                         break;
                     case 2:
                         map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
@@ -456,18 +441,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         break;
                     case 1:
-                        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-                        sharingIntent.setType("text/plain");
-                        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Chia sẻ từ Map Assistant");
-
-                        String msg = "message";
                         if (place.length() > 0 && address.length() > 0)
                         {
-                            msg = "Tôi đang ở " + place + ".\nĐịa chỉ " + address;
-                        }
-                        sharingIntent.putExtra(Intent.EXTRA_TEXT, msg);
+                            String msg = "Tôi đang ở " + place + ".\nĐịa chỉ " + address;
 
-                        startActivity(Intent.createChooser(sharingIntent, "message"));
+                            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                            sharingIntent.setType("text/plain");
+                            sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Chia sẻ từ Map Assistant");
+                            sharingIntent.putExtra(Intent.EXTRA_TEXT, msg);
+
+                            startActivity(Intent.createChooser(sharingIntent, "message"));
+
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(), "Hãy chọn địa điểm trước", Toast.LENGTH_SHORT).show();
+                        }
                         break;
                 }
                 break;
@@ -482,6 +471,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     void loadFirebase()
     {
         prbLoading.setVisibility(View.VISIBLE);
+        //Toast.makeText(getApplicationContext(), "Đang tải dữ liệu", Toast.LENGTH_SHORT).show();
         list = new ArrayList<>();
         Firebase ref = new Firebase("https://androidtraffic.firebaseio.com/");
         ref.addValueEventListener(new ValueEventListener()
@@ -526,7 +516,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             //Traffic traffic = new Traffic(lat, lng, jamList.get(0).getVote());
                         }
                     }
-
+                    Log.d("123", "" + list.size());
                     markTraffic();
                     prbLoading.setVisibility(View.GONE);
                 }

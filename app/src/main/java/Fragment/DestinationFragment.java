@@ -43,7 +43,7 @@ public class DestinationFragment extends Fragment implements AdapterView.OnItemC
         super.onCreate(savedInstanceState);
 
         init();
-        Log.d("123", "uolo");
+
         list = new ArrayList<>();
         loadDestination();
     }
@@ -52,7 +52,7 @@ public class DestinationFragment extends Fragment implements AdapterView.OnItemC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View convertView = inflater.inflate(R.layout.fragment_destination, container, false);
-        Log.d("123", "" + loaded);
+       /* Log.d("123", "" + loaded);
         prbLoading = (ProgressBar) convertView.findViewById(R.id.prbLoading);
         if (loaded)
         {
@@ -65,7 +65,8 @@ public class DestinationFragment extends Fragment implements AdapterView.OnItemC
         loaded = true;
 Log.d("123", "size=" + list.size() + " " + this.getClass());
 
-        Log.d("123", "" + adapter + "   " + "   " + lvDestination);
+        Log.d("123", "" + adapter + "   " + "   " + lvDestination);*/
+        prbLoading = (ProgressBar) convertView.findViewById(R.id.prbLoading);
 
         adapter = new ContactAdt(getActivity().getApplicationContext(), R.layout.row_destination, list);
         lvDestination = (ListView) convertView.findViewById(R.id.lvDestination);

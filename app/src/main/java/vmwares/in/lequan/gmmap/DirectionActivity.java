@@ -1,9 +1,6 @@
 package vmwares.in.lequan.gmmap;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
@@ -44,7 +41,7 @@ public class DirectionActivity extends AppCompatActivity
     float zoom;
     private int width;
     private int height;
-    String place;
+    String restaurant;
 
     ImageButton btnBack;
     ImageButton btnReverse;
@@ -76,7 +73,7 @@ public class DirectionActivity extends AppCompatActivity
         Intent intent = getIntent();
         position = intent.getParcelableExtra("position");
         zoom = intent.getFloatExtra("zoom", 16);
-        place = intent.getStringExtra("address");
+        restaurant = intent.getStringExtra("restaurant");
     }
 
     void setListener()
@@ -94,7 +91,7 @@ public class DirectionActivity extends AppCompatActivity
         map = googleMap;
         map.setContentDescription("");
         map.setTrafficEnabled(true);
-        if (place == null)
+        if (restaurant == null)
         {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, zoom));
         }
@@ -102,7 +99,7 @@ public class DirectionActivity extends AppCompatActivity
         {
             try
             {
-                Intent intent = (new PlaceAutocomplete.IntentBuilder(2)).zzeq(place).zzig(1).build(this);
+                Intent intent = (new PlaceAutocomplete.IntentBuilder(2)).zzeq(restaurant).zzig(1).build(this);
                 startActivityForResult(intent, 3);
             }
             catch (GooglePlayServicesRepairableException e)
@@ -201,7 +198,7 @@ public class DirectionActivity extends AppCompatActivity
             @Override
             public void onLoaded(ArrayList<LatLng> directionPoints)
             {
-                PolylineOptions line = new PolylineOptions().width(10).color(getResources().getColor(R.color.colorPrimary));
+                PolylineOptions line = new PolylineOptions().width(13).color(getResources().getColor(R.color.colorPrimary));
 
                 for (int i = 0; i < directionPoints.size(); i++)
                 {
