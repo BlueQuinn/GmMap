@@ -165,8 +165,7 @@ public class DirectionActivity extends AppCompatActivity
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 textView[0].setText("my location");
                 textView[1].setText(place.getName());
-                //latLng[0] = MainActivity.myLocation;
-                latLng[0] = new LatLng(10.762689, 106.68233989999999);
+                latLng[0] = MainActivity.myLocation;
                 latLng[1] = place.getLatLng();
 
                 BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.car);

@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     FloatingActionButton btnTrack, btnFavourite;
     ProgressBar prbLoading;
-    //PlacePickerFragment fragmentPlace;
     public static LatLng myLocation;
     Marker marker;
     ImageButton btnMenu, btnVoice;
@@ -230,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMyLocationChange(Location location)
     {
         myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, map.getCameraPosition().zoom));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
         map.setOnMyLocationChangeListener(null);
         Log.d("123", "my = " + myLocation.latitude + " " + myLocation.longitude);
     }
@@ -297,6 +296,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             {
                 if (place.length() > 1 && address.length() > 1)
                 {
+                    dbHelper.delete("Favourite", place);
                     dbHelper.insert("Favourite", place, address);
                     Toast.makeText(getApplicationContext(), "Đã lưu vào Yêu thích", Toast.LENGTH_SHORT).show();
                 }
