@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import Listener.OnCloseListener;
+import Listener.OnPlaceSelectedListener;
 import vmwares.in.lequan.gmmap.MainActivity;
 import vmwares.in.lequan.gmmap.R;
 
@@ -190,7 +191,8 @@ public class PlacePickerFragment extends Fragment implements OnClickListener
             PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             builder.include(MainActivity.myLocation);
-            intentBuilder.setLatLngBounds(toBounds(MainActivity.myLocation, 400));
+            //intentBuilder.setLatLngBounds(toBounds(MainActivity.myLocation, 30));
+            //intentBuilder.setLatLngBounds(builder.build());
             try
             {
                 startActivityForResult(intentBuilder.build(getActivity()), 2);

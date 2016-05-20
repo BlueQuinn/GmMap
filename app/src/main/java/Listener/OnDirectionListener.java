@@ -5,7 +5,7 @@ import com.google.android.gms.location.places.Place;
 /**
  * Created by lequan on 4/23/2016.
  */
-public interface OnNavigationListener
+public interface OnDirectionListener
 {
-    void onNavigation(Place startLocation, Place endLocation);
+    void onDirection(Place startLocation, Place endLocation);
 }

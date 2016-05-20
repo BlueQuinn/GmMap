@@ -30,10 +30,10 @@ import java.util.ArrayList;
 
 import AsyncTask.DirectionAst;
 import Listener.OnLoadListener;
-import Listener.OnNavigationListener;
+import Listener.OnDirectionListener;
 
 public class DirectionActivity extends AppCompatActivity
-        implements View.OnClickListener, OnMapReadyCallback, OnNavigationListener
+        implements View.OnClickListener, OnMapReadyCallback, OnDirectionListener
 {
     GoogleMap map;
     LatLng position;
@@ -72,7 +72,7 @@ public class DirectionActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         position = intent.getParcelableExtra("position");
-        zoom = intent.getFloatExtra("zoom", 16);
+        zoom = intent.getFloatExtra("zoom", 15);
         restaurant = intent.getStringExtra("restaurant");
     }
 
@@ -242,7 +242,7 @@ public class DirectionActivity extends AppCompatActivity
     }
 
     @Override
-    public void onNavigation(Place startLocation, Place endLocation)
+    public void onDirection(Place startLocation, Place endLocation)
     {
         final LatLng start = startLocation.getLatLng();
         final LatLng end = endLocation.getLatLng();

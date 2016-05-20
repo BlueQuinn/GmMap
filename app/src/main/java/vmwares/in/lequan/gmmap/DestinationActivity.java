@@ -48,6 +48,8 @@ public class DestinationActivity extends AppCompatActivity
             @Override
             public void onPlaceSelected(Place place)
             {
+
+
                 LatLng position = place.getLatLng();
 
                 historyFragment.save(place.getName().toString(), place.getAddress().toString());

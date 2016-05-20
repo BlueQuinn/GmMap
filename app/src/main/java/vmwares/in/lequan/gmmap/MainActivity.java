@@ -509,11 +509,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         if (jamList.size() > 0)
                         {
-                            //sortDescending(jamList);
                             double lat = (double) item.child("position/lat").getValue();
                             double lng = (double) item.child("position/lng").getValue();
                             list.add(new LatLng(lat, lng));
-                            //Traffic traffic = new Traffic(lat, lng, jamList.get(0).getVote());
                         }
                     }
                     Log.d("123", "" + list.size());

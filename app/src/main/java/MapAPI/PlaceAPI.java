@@ -23,7 +23,7 @@ public class PlaceAPI
     {
         StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         googlePlacesUrl.append("location=" + latitude + "," + longitude);
-        googlePlacesUrl.append("&radius=" + 5000);
+        googlePlacesUrl.append("&radius=" + 3000);
         googlePlacesUrl.append("&types=" + type);
         googlePlacesUrl.append("&key=" + context.getResources().getString(R.string.google_maps_key));
         Log.d("123", "url = " + googlePlacesUrl.toString());

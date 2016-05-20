@@ -87,7 +87,7 @@ public class NotifyActivity extends AppCompatActivity implements View.OnClickLis
     {
         if (checkLocation())
         {
-            showMessage("Vị trí này của bạn đã thông báo rồi");
+            showMessage("Không thể gửi thông báo !!!\nVị trí này của bạn đã thông báo rồi");
         }
         else
         {
