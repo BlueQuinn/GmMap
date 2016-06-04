@@ -52,20 +52,7 @@ public class DestinationFragment extends Fragment implements AdapterView.OnItemC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View convertView = inflater.inflate(R.layout.fragment_destination, container, false);
-       /* Log.d("123", "" + loaded);
-        prbLoading = (ProgressBar) convertView.findViewById(R.id.prbLoading);
-        if (loaded)
-        {
-            prbLoading.setVisibility(View.GONE);
-        }
-        else
-        {
-            prbLoading.setVisibility(View.VISIBLE);
-        }
-        loaded = true;
-Log.d("123", "size=" + list.size() + " " + this.getClass());
 
-        Log.d("123", "" + adapter + "   " + "   " + lvDestination);*/
         prbLoading = (ProgressBar) convertView.findViewById(R.id.prbLoading);
 
         adapter = new ContactAdt(getActivity().getApplicationContext(), R.layout.row_destination, list);
@@ -97,10 +84,10 @@ Log.d("123", "size=" + list.size() + " " + this.getClass());
             @Override
             public void onLoaded(Object result)
             {
-
                 prbLoading.setVisibility(View.GONE);
                 ArrayList<Destination> listDestination = (ArrayList<Destination>) result;
-                for (int i = 0; i < listDestination.size(); ++i)
+                //for (int i = 0; i < listDestination.size(); ++i)
+                for (int i = listDestination.size() - 1; i > -1; --i)
                 {
                     list.add(listDestination.get(i));
                 }

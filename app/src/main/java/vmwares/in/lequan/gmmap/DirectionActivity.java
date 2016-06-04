@@ -197,8 +197,7 @@ public class DirectionActivity extends AppCompatActivity
             @Override
             public void onLoaded(ArrayList<LatLng> directionPoints)
             {
-                PolylineOptions line = new PolylineOptions().width(13).color(getResources().getColor(R.color.colorPrimary));
-
+                PolylineOptions line = new PolylineOptions().width(12).color(getResources().getColor(R.color.colorPrimary));
                 for (int i = 0; i < directionPoints.size(); i++)
                 {
                     line.add(directionPoints.get(i));

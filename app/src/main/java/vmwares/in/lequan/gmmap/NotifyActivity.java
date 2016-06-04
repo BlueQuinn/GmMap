@@ -138,7 +138,7 @@ public class NotifyActivity extends AppCompatActivity implements View.OnClickLis
                         double lat = (Double) item.child("position/lat").getValue();
                         double lng = (Double) item.child("position/lng").getValue();
                         float distance = getDistance(myLat, myLng, lat, lng);
-                        if (distance >= 0 && distance <= 1)
+                        if (distance >= 0 && distance <= 1)     // kiểm tra xem trên Firebase đã tồn tại điểm nào ở gần điểm này mà bị tắc đường chưa (gần ở đây là dưới 1km)
                         {
                             boolean findTime = false;
                             DataSnapshot jamList = item.child("jam");

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
@@ -20,7 +19,6 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -47,7 +45,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -466,13 +463,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return false;
     }
 
-    ArrayList<LatLng> list;
+    ArrayList<LatLng> listTraffic;
 
     void loadFirebase()
     {
         prbLoading.setVisibility(View.VISIBLE);
         //Toast.makeText(getApplicationContext(), "Đang tải dữ liệu", Toast.LENGTH_SHORT).show();
-        list = new ArrayList<>();
+        listTraffic = new ArrayList<>();
         Firebase ref = new Firebase("https://androidtraffic.firebaseio.com/");
         ref.addValueEventListener(new ValueEventListener()
         {
@@ -511,10 +508,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         {
                             double lat = (double) item.child("position/lat").getValue();
                             double lng = (double) item.child("position/lng").getValue();
-                            list.add(new LatLng(lat, lng));
+                            listTraffic.add(new LatLng(lat, lng));
                         }
                     }
-                    Log.d("123", "" + list.size());
+                    Log.d("123", "" + listTraffic.size());
                     markTraffic();
                     prbLoading.setVisibility(View.GONE);
                 }
@@ -538,7 +535,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         map.clear();
         BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.traffic);
         MarkerOptions options = new MarkerOptions().icon(icon);
-        for (LatLng traffic : list)
+        for (LatLng traffic : listTraffic)
         {
             map.addMarker(options.position(traffic));
         }
