@@ -18,7 +18,7 @@ import DTO.Restaurant;
 import Listener.OnLoadListener;
 
 public class RestaurantActivity extends AppCompatActivity
-        implements AdapterView.OnItemClickListener, OnLoadListener
+        implements AdapterView.OnItemClickListener, OnLoadListener<ArrayList<Restaurant>>
 {
     GridView gridView;
     TextView tvEmpty;
@@ -43,7 +43,6 @@ public class RestaurantActivity extends AppCompatActivity
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(this);
 
-
         Intent intent = getIntent();
 
         String url = "https://www.deliverynow.vn/ho-chi-minh/danh-sach-dia-diem-phuc-vu-" + intent.getStringExtra("url") + "-giao-tan-noi";
@@ -65,10 +64,9 @@ public class RestaurantActivity extends AppCompatActivity
     }
 
     @Override
-    public void onLoaded(Object result)
+    public void onLoaded(ArrayList<Restaurant> list)
     {
         prbLoading.setVisibility(View.GONE);
-        ArrayList<Restaurant> list = (ArrayList<Restaurant>) result;
         if (list.size() < 1)
         {
             tvEmpty.setVisibility(View.VISIBLE);

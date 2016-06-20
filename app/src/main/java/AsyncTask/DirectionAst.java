@@ -15,7 +15,7 @@ import Utils.JsonUtils;
  */
 public class DirectionAst extends AsyncTask<LatLng, Integer, ArrayList<LatLng>>
 {
-    OnLoadListener listener;
+    OnLoadListener<ArrayList<LatLng>> listener;
     String mode;
 
     public String getMode()

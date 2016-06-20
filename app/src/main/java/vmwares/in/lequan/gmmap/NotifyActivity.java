@@ -54,10 +54,17 @@ public class NotifyActivity extends AppCompatActivity implements View.OnClickLis
         tvAddress = (TextView) findViewById(R.id.tvAddress);
 
         btnNotify = (Button) findViewById(R.id.btnNotify);
-        btnNotify.setOnClickListener(this);
 
         String address = AddressUtils.getAddress(new Geocoder(this, Locale.getDefault()), myLat, myLng);
+        if (address.length() < 1)
+        {
+            tvAddress.setText("Không có kết nối internet");
+            btnNotify.setEnabled(false);
+            return;
+        }
+
         tvAddress.setText("Bạn đang ở " + address);
+        btnNotify.setOnClickListener(this);
     }
 
     float getDistance(double lat1, double lng1, double lat2, double lng2)

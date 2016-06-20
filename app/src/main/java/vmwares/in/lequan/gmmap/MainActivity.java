@@ -315,16 +315,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             {
                 String place = adapter.getItem(position).toLowerCase().replace(" ", "_");
                 FindPlaceAst asyncTask = new FindPlaceAst(getApplicationContext(), place);
-                asyncTask.setOnLoadListener(new OnLoadListener()
+                asyncTask.setOnLoadListener(new OnLoadListener<ArrayList<Place>>()
                 {
                     @Override
-                    public void onLoaded(Object obj)
+                    public void onLoaded(ArrayList<Place> list)
                     {
+                        if (list == null || list.size() < 1)
+                        {
+                            Toast.makeText(getApplicationContext(), "Không tải được dữ liệu", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         map.clear();
                         BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.marker);
                         MarkerOptions options = new MarkerOptions().icon(icon);
                         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                        ArrayList<Place> list = (ArrayList<Place>) obj;
+                        //ArrayList<Place> list = (ArrayList<Place>) result;
                         for (int i = 0; i < list.size(); ++i)
                         {
                             Place place = list.get(i);

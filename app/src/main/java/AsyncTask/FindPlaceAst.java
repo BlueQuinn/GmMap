@@ -18,7 +18,7 @@ import Utils.JsonUtils;
 public class FindPlaceAst extends AsyncTask<Double, Integer, ArrayList<Place>>
 {
     Context context;
-    OnLoadListener listener;
+    OnLoadListener<ArrayList<Place>> listener;
     String type;
 
     public void setOnLoadListener(OnLoadListener listener)

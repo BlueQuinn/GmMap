@@ -19,13 +19,15 @@ import vmwares.in.lequan.gmmap.R;
 /**
  * Created by Quan-DevTeam on 11/9/15.
  */
-public class MenuAdt extends BaseExpandableListAdapter {
+public class MenuAdt extends BaseExpandableListAdapter
+{
     Context context;
     int resourceRow;
     int resourceSection;
     ArrayList<MenuSection> listSection;
 
-    public MenuAdt(Context context, int resourceRow, int resourceSection, ArrayList<MenuSection> listMenuIem) {
+    public MenuAdt(Context context, int resourceRow, int resourceSection, ArrayList<MenuSection> listMenuIem)
+    {
         this.context = context;
         this.resourceRow = resourceRow;
         this.resourceSection = resourceSection;
@@ -33,21 +35,24 @@ public class MenuAdt extends BaseExpandableListAdapter {
     }
 
     @Override
-    public int getGroupCount() {
+    public int getGroupCount()
+    {
         return listSection.size();
     }
 
     @Override
-    public int getChildrenCount(int groupPosition) {
+    public int getChildrenCount(int groupPosition)
+    {
         return listSection.get(groupPosition).getListSubtitle().size();
     }
 
     @Override
-    public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(context).inflate(resourceSection,parent,false);
+    public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
+    {
+        convertView = LayoutInflater.from(context).inflate(resourceSection, parent, false);
 
         MenuSection item = listSection.get(groupPosition);
-        TextView tvTitle = (TextView)convertView.findViewById(R.id.tvTitle);
+        TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
         tvTitle.setText(item.getTitle());
 
         ExpandableListView mExpandableListView = (ExpandableListView) parent;
@@ -57,9 +62,11 @@ public class MenuAdt extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        if(convertView==null){
-            convertView = LayoutInflater.from(context).inflate(resourceRow,parent,false);
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
+    {
+        if (convertView == null)
+        {
+            convertView = LayoutInflater.from(context).inflate(resourceRow, parent, false);
         }
 
         //lay item thu position va set data
@@ -67,38 +74,44 @@ public class MenuAdt extends BaseExpandableListAdapter {
         ArrayList<Menu> listMenu = item.getListSubtitle();
 
         Menu subitem = listMenu.get(childPosition);
-        ((TextView)convertView.findViewById(R.id.tvSubTitle)).setText(subitem.getTitle());
+        ((TextView) convertView.findViewById(R.id.tvSubTitle)).setText(subitem.getTitle());
         ((ImageView) convertView.findViewById(R.id.imgIcon)).setImageResource(subitem.getIcon());
         return convertView;
     }
 
     @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
+    public boolean isChildSelectable(int groupPosition, int childPosition)
+    {
         return true;
     }
 
     @Override
-    public Object getGroup(int groupPosition) {
+    public Object getGroup(int groupPosition)
+    {
         return null;
     }
 
     @Override
-    public Object getChild(int groupPosition, int childPosition) {
+    public Object getChild(int groupPosition, int childPosition)
+    {
         return null;
     }
 
     @Override
-    public long getGroupId(int groupPosition) {
+    public long getGroupId(int groupPosition)
+    {
         return 0;
     }
 
     @Override
-    public long getChildId(int groupPosition, int childPosition) {
+    public long getChildId(int groupPosition, int childPosition)
+    {
         return 0;
     }
 
     @Override
-    public boolean hasStableIds() {
+    public boolean hasStableIds()
+    {
         return true;
     }
 }

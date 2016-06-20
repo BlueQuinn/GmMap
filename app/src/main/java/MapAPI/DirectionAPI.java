@@ -23,6 +23,9 @@ public class DirectionAPI
 
     public static ArrayList<LatLng> getDirection(JSONObject object)
     {
+        if (object == null)
+            return null;
+
         ArrayList<LatLng> directionPoints = new ArrayList<>();
         try
         {

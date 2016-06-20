@@ -32,6 +32,9 @@ public class PlaceAPI
 
     public static ArrayList<Place> getPlaces(JSONObject object)
     {
+        if (object == null)
+            return null;
+
         ArrayList<Place> placesList = new ArrayList<>();
         try
         {

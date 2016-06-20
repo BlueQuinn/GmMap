@@ -18,13 +18,15 @@ import vmwares.in.lequan.gmmap.R;
 /**
  * Created by lequan on 2/1/2016.
  */
-public class RestaurantSectionAdt extends ArrayAdapter<RestaurantSection> {
+public class RestaurantSectionAdt extends ArrayAdapter<RestaurantSection>
+{
 
     Context context;
     int resource;
     List<RestaurantSection> list;
 
-    public RestaurantSectionAdt(Context context, int resource, List<RestaurantSection> list) {
+    public RestaurantSectionAdt(Context context, int resource, List<RestaurantSection> list)
+    {
         super(context, resource, list);
         this.context = context;
         this.resource = resource;
@@ -32,18 +34,21 @@ public class RestaurantSectionAdt extends ArrayAdapter<RestaurantSection> {
     }
 
     @Override
-    public int getCount() {
+    public int getCount()
+    {
         return list.size();
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(resource,parent,false);
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        if (convertView == null)
+        {
+            convertView = LayoutInflater.from(context).inflate(resource, parent, false);
         }
 
-        TextView title = (TextView)convertView.findViewById(R.id.tvPlace);
-        ImageView image = (ImageView)convertView.findViewById(R.id.imvPlace);
+        TextView title = (TextView) convertView.findViewById(R.id.tvPlace);
+        ImageView image = (ImageView) convertView.findViewById(R.id.imvPlace);
 
         title.setText(list.get(position).getName());
         Picasso.with(context).load(list.get(position).getImage()).into(image);

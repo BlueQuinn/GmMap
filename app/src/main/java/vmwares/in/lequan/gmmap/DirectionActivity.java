@@ -7,6 +7,7 @@ import android.view.Display;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -197,6 +198,11 @@ public class DirectionActivity extends AppCompatActivity
             @Override
             public void onLoaded(ArrayList<LatLng> directionPoints)
             {
+                if (directionPoints == null || directionPoints.size() < 1)
+                {
+                    Toast.makeText(getApplicationContext(), "Không thể tải được dữ liệu", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 PolylineOptions line = new PolylineOptions().width(12).color(getResources().getColor(R.color.colorPrimary));
                 for (int i = 0; i < directionPoints.size(); i++)
                 {

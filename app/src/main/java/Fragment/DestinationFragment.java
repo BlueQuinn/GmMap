@@ -60,8 +60,6 @@ public class DestinationFragment extends Fragment implements AdapterView.OnItemC
         lvDestination.setAdapter(adapter);
         lvDestination.setOnItemClickListener(this);
 
-
-
         return convertView;
     }
 
@@ -75,17 +73,15 @@ public class DestinationFragment extends Fragment implements AdapterView.OnItemC
 
     }
 
-
     void loadDestination()
     {
         initAsyncTask();
-        asyncTask.setOnLoadListener(new OnLoadListener()
+        asyncTask.setOnLoadListener(new OnLoadListener<ArrayList<Destination>>()
         {
             @Override
-            public void onLoaded(Object result)
+            public void onLoaded(ArrayList<Destination> listDestination)
             {
                 prbLoading.setVisibility(View.GONE);
-                ArrayList<Destination> listDestination = (ArrayList<Destination>) result;
                 //for (int i = 0; i < listDestination.size(); ++i)
                 for (int i = listDestination.size() - 1; i > -1; --i)
                 {

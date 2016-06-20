@@ -19,7 +19,7 @@ import DTO.Food;
 import DTO.Restaurant;
 import Listener.OnLoadListener;
 
-public class FoodActivity extends AppCompatActivity implements OnLoadListener, OnClickListener
+public class FoodActivity extends AppCompatActivity implements OnLoadListener<ArrayList<Food>>, OnClickListener
 {
     GridView gridMenu;
     TextView tvEmpty;
@@ -61,10 +61,9 @@ public class FoodActivity extends AppCompatActivity implements OnLoadListener, O
     }
 
     @Override
-    public void onLoaded(Object result)
+    public void onLoaded(ArrayList<Food> list)
     {
         prbLoading.setVisibility(View.GONE);
-        ArrayList<Food> list = (ArrayList<Food>) result;
         if (list.size() < 1)
         {
             tvEmpty.setVisibility(View.VISIBLE);

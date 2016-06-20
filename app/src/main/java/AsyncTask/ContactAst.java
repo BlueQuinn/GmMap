@@ -39,8 +39,6 @@ public class ContactAst extends DestinationAst
         return list;
     }
 
-
-
     String contactName(String contact_id)
     {
         Cursor nameCursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, ContactsContract.Contacts._ID + " = ?",

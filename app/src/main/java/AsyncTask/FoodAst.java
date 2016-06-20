@@ -23,19 +23,20 @@ import vmwares.in.lequan.gmmap.R;
 /**
  * Created by Quan-DevTeam on 10/8/15.
  */
-public class FoodAst extends AsyncTask<String, Integer, ArrayList<Food>> {
+public class FoodAst extends AsyncTask<String, Integer, ArrayList<Food>>
+{
 
-
-    public FoodAst() {
+    public FoodAst()
+    {
 
     }
 
     @Override
     protected ArrayList<Food> doInBackground(String... params)
     {
-        ArrayList<Food> listArticle = new ArrayList<>();
-        try {
-
+        ArrayList<Food> list = new ArrayList<>();
+        try
+        {
             HtmlCleaner htmlCleaner = new HtmlCleaner();
             CleanerProperties cleanerProperties = htmlCleaner.getProperties();
             cleanerProperties.setAllowHtmlInsideAttributes(true);
@@ -60,31 +61,38 @@ public class FoodAst extends AsyncTask<String, Integer, ArrayList<Food>> {
                 String img = (String) nodeImg[i];
                 img = img.replace("/content/images/no-image.png", "");
 
-                listArticle.add(new Food(title, url, img));
+                list.add(new Food(title, url, img));
             }
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XPatherException e) {
+        }
+        catch (MalformedURLException e)
+        {
             e.printStackTrace();
         }
-        return listArticle;
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        catch (XPatherException e)
+        {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     @Override
-    protected void onPreExecute() {
+    protected void onPreExecute()
+    {
         super.onPreExecute();
     }
 
     @Override
-    protected void onPostExecute(ArrayList<Food> album) {
+    protected void onPostExecute(ArrayList<Food> album)
+    {
         super.onPostExecute(album);
         listener.onLoaded(album);
     }
 
-    OnLoadListener listener;
+    OnLoadListener<ArrayList<Food>> listener;
 
     public void setOnLoaded(OnLoadListener onLoaded)
     {
@@ -92,7 +100,8 @@ public class FoodAst extends AsyncTask<String, Integer, ArrayList<Food>> {
     }
 
     @Override
-    protected void onProgressUpdate(Integer... values) {
+    protected void onProgressUpdate(Integer... values)
+    {
         super.onProgressUpdate(values);
     }
 }

@@ -25,20 +25,22 @@ import DTO.Restaurant;
 /**
  * Created by Quan-DevTeam on 10/8/15.
  */
-public class RestaurantAst extends AsyncTask<String, Integer, ArrayList<Restaurant>> {
+public class RestaurantAst extends AsyncTask<String, Integer, ArrayList<Restaurant>>
+{
 
     ProgressBar prbLoading;
 
-    public RestaurantAst(View view) {
+    public RestaurantAst(View view)
+    {
         prbLoading = (ProgressBar) view.findViewById(R.id.prbLoading);
     }
 
     @Override
     protected ArrayList<Restaurant> doInBackground(String... params)
     {
-        ArrayList<Restaurant> listArticle = new ArrayList<>();
-        try {
-
+        ArrayList<Restaurant> listRestaurant = new ArrayList<>();
+        try
+        {
             HtmlCleaner htmlCleaner = new HtmlCleaner();
             CleanerProperties cleanerProperties = htmlCleaner.getProperties();
             cleanerProperties.setAllowHtmlInsideAttributes(true);
@@ -59,32 +61,39 @@ public class RestaurantAst extends AsyncTask<String, Integer, ArrayList<Restaura
 
             for (int i = 0; i < nodeImg.length; ++i)
             {
-                String title =  UnicodeConverter.convert((String) node_title[i]);
+                String title = UnicodeConverter.convert((String) node_title[i]);
                 String url = (String) node_url[i];
                 String address = UnicodeConverter.convert(nodeAddress[i].toString());
                 String img = (String) nodeImg[i];
 
-                listArticle.add(new Restaurant(title, img, address, url));
+                listRestaurant.add(new Restaurant(title, img, address, url));
             }
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XPatherException e) {
+        }
+        catch (MalformedURLException e)
+        {
             e.printStackTrace();
         }
-        return listArticle;
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        catch (XPatherException e)
+        {
+            e.printStackTrace();
+        }
+        return listRestaurant;
     }
 
     @Override
-    protected void onPreExecute() {
+    protected void onPreExecute()
+    {
         super.onPreExecute();
         prbLoading.setVisibility(View.VISIBLE);
     }
 
     @Override
-    protected void onPostExecute(ArrayList<Restaurant> album) {
+    protected void onPostExecute(ArrayList<Restaurant> album)
+    {
         super.onPostExecute(album);
         listener.onLoaded(album);
         prbLoading.setVisibility(View.GONE);
@@ -98,7 +107,8 @@ public class RestaurantAst extends AsyncTask<String, Integer, ArrayList<Restaura
     }
 
     @Override
-    protected void onProgressUpdate(Integer... values) {
+    protected void onProgressUpdate(Integer... values)
+    {
         super.onProgressUpdate(values);
     }
 }
