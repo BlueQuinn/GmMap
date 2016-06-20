@@ -87,7 +87,7 @@ public class NotifyActivity extends AppCompatActivity implements View.OnClickLis
     {
         if (checkLocation())
         {
-            showMessage("Không thể gửi thông báo !!!\nVị trí này của bạn đã thông báo rồi");
+            showMessage("Không thể gửi thông báo !!!\nBạn đã từng thông báo vị trí này từ trước đó rồi");
         }
         else
         {
@@ -118,7 +118,7 @@ public class NotifyActivity extends AppCompatActivity implements View.OnClickLis
     {
         change = false;
 
-        final Firebase ref = new Firebase("https://androidtraffic.firebaseio.com/");
+        final Firebase ref = new Firebase(getResources().getString(R.string.trafficDatabase));
         ref.addValueEventListener(new ValueEventListener()
         {
             @Override

@@ -57,6 +57,7 @@ import DTO.Place;
 import Listener.OnLoadListener;
 import Sqlite.SqliteHelper;
 import Utils.AddressUtils;
+import Utils.RequestCode;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
         View.OnClickListener, View.OnLongClickListener, GoogleMap.OnMyLocationChangeListener,
@@ -67,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     FloatingActionButton btnTrack, btnFavourite;
     ProgressBar prbLoading;
     public static LatLng myLocation;
-    Marker marker;
     ImageButton btnMenu, btnVoice;
     TextView txtSearch;
     String place = "", address = "";
@@ -80,14 +80,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     ArrayList<MenuSection> listSection = new ArrayList<>();
     DrawerLayout drawerLayout;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Firebase.setAndroidContext(this);
-
-
 
         btnTrack = (FloatingActionButton) findViewById(R.id.btnTrack);
         btnFavourite = (FloatingActionButton) findViewById(R.id.btnFavourite);
@@ -111,27 +110,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         initDatabase();
 
         myLocation = new LatLng(10.762689, 106.68233989999999);
-        //setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                *//*FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction transaction = fm.beginTransaction();
-                transaction.replace(R.id.fragment_container, autocompleteFragment);
-                transaction.commit();*//*
-            }
-        });*/
     }
 
     void initMenu()
@@ -152,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         listSection.add(new MenuSection("Xem bản đồ", listMenu));
 
         listMenu = new ArrayList<>();
-        listMenu.add(new Menu("Facebook", R.drawable.facebook));
+        //listMenu.add(new Menu("Facebook", R.drawable.facebook));
         listMenu.add(new Menu("SMS", R.drawable.sms));
         listSection.add(new MenuSection("Chia sẻ", listMenu));
     }
@@ -179,7 +159,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu)
     {
@@ -198,8 +177,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap)
     {
         map = googleMap;
-        marker = map.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
-        marker.setVisible(false);
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
@@ -236,28 +213,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     {
         if (data != null)
         {
+            map.clear();
             switch (requestCode)
             {
-                case 1:
+                case RequestCode.SEARCH_DESTINATION:
                 {
                     place = data.getStringExtra("place");
                     address = data.getStringExtra("address");
                     txtSearch.setText(place);
 
                     LatLng position = data.getParcelableExtra("position");
-                    marker.setPosition(position);
-                    marker.setVisible(true);
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 17));
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 16));
+
+                    BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.marker);
+                    map.addMarker(new MarkerOptions().icon(icon).position(position));
                     break;
                 }
 
-                case 2:
+                case RequestCode.VOICE_SEARCH:
                 {
                     if (resultCode == RESULT_OK)
                     {
                         ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                         txtSearch.setText(result.get(0));
-                        startActivityForResult(new Intent(this, DestinationActivity.class).putExtra("address", txtSearch.getText().toString()), 1);
+                        startActivityForResult(new Intent(this, DestinationActivity.class).putExtra("address", txtSearch.getText().toString()), RequestCode.SEARCH_DESTINATION);
                     }
                     break;
                 }
@@ -278,15 +257,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     return;
                 }
                 map.setOnMyLocationChangeListener(this);
-
                 txtSearch.setText(AddressUtils.getAddress(new Geocoder(this, Locale.getDefault()), myLocation.latitude, myLocation.longitude));
-
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, map.getCameraPosition().zoom));
                 break;
             }
 
             case R.id.txtSearch:
-                startActivityForResult(new Intent(this, DestinationActivity.class).putExtra("address", txtSearch.getText().toString()), 1);
+                startActivityForResult(new Intent(this, DestinationActivity.class).putExtra("address", txtSearch.getText().toString()), RequestCode.SEARCH_DESTINATION);
                 break;
 
             case R.id.btnFavourite:
@@ -310,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
                 intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Bạn cần tìm gì ?");
-                startActivityForResult(intent, 2);
+                startActivityForResult(intent, RequestCode.VOICE_SEARCH);
                 break;
             }
 
@@ -382,16 +359,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             {
                 switch (childPosition)
                 {
-                    case 0:
+                    case 0:     // restaurant
                     {
                         Intent i = new Intent(this, PlaceActivity.class);
                         startActivity(i);
                         break;
                     }
-                    case 1:
+                    case 1:     // search nearby place by place type
                         showDialog();
                         break;
-                    case 2:
+                    case 2:     // direction
                     {
                         Intent intent = new Intent(this, DirectionActivity.class);
                         intent.putExtra("position", map.getCameraPosition().target);
@@ -399,11 +376,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         startActivity(intent);
                         break;
                     }
-                    case 3:
-                        loadFirebase();
+                    case 3:     // load traffic jam
+                        loadTraffic();
                         break;
 
-                    case 4:
+                    case 4:     // notify traffic jam
                     {
                         Intent intent = new Intent(this, NotifyActivity.class);
                         startActivity(intent);
@@ -435,9 +412,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 switch (childPosition)
                 {
                     case 0:
-
-                        break;
-                    case 1:
                         if (place.length() > 0 && address.length() > 0)
                         {
                             String msg = "Tôi đang ở " + place + ".\nĐịa chỉ " + address;
@@ -448,13 +422,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             sharingIntent.putExtra(Intent.EXTRA_TEXT, msg);
 
                             startActivity(Intent.createChooser(sharingIntent, "message"));
-
                         }
                         else
                         {
                             Toast.makeText(getApplicationContext(), "Hãy chọn địa điểm trước", Toast.LENGTH_SHORT).show();
                         }
                         break;
+                    /*case 1:     // my place sharing
+                        if (place.length() > 0 && address.length() > 0)
+                        {
+                            String msg = "Tôi đang ở " + place + ".\nĐịa chỉ " + address;
+
+                            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                            sharingIntent.setType("text/plain");
+                            sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Chia sẻ từ Map Assistant");
+                            sharingIntent.putExtra(Intent.EXTRA_TEXT, msg);
+
+                            startActivity(Intent.createChooser(sharingIntent, "message"));
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(), "Hãy chọn địa điểm trước", Toast.LENGTH_SHORT).show();
+                        }
+                        break;*/
                 }
                 break;
             }
@@ -465,12 +455,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     ArrayList<LatLng> listTraffic;
 
-    void loadFirebase()
+    void loadTraffic()
     {
         prbLoading.setVisibility(View.VISIBLE);
         //Toast.makeText(getApplicationContext(), "Đang tải dữ liệu", Toast.LENGTH_SHORT).show();
         listTraffic = new ArrayList<>();
-        Firebase ref = new Firebase("https://androidtraffic.firebaseio.com/");
+        Firebase ref = new Firebase(getResources().getString(R.string.trafficDatabase));
         ref.addValueEventListener(new ValueEventListener()
         {
             @Override

@@ -28,11 +28,11 @@ public class SqliteHelper extends SQLiteOpenHelper
     static SQLiteDatabase db;
     private static final int DB_VERSION = 1;
 
-    public SqliteHelper(Context context, String DATABASE_NAME)
+    public SqliteHelper(Context context, String database)
     {
-        super(context, DATABASE_NAME, null, DB_VERSION);
+        super(context, database, null, DB_VERSION);
         this.context = context;
-        this.DB_NAME = DATABASE_NAME;
+        this.DB_NAME = database;
         DB_PATH = "/data/data/" + context.getPackageName() + "/databases/";
     }
 
@@ -118,12 +118,12 @@ public class SqliteHelper extends SQLiteOpenHelper
         try
         {
             db.execSQL(sql);
-            Log.d("ERROR", "\n\n\nGOOD");
+            Log.d("ERROR", "\n\n\nsql excute success");
             return true;
         }
         catch (Exception e)
         {
-            Log.d("ERROR", "\n\n\nERROR");
+            Log.d("ERROR", "\n\n\nsql excute failed");
             e.printStackTrace();
             return false;
         }

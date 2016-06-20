@@ -21,6 +21,7 @@ import Fragment.HistoryFragment;
 import Fragment.PlacePickerFragment;
 import Listener.OnCloseListener;
 import Listener.OnPlaceSelectedListener;
+import Utils.RequestCode;
 
 public class DestinationActivity extends AppCompatActivity
         implements OnPlaceSelectedListener, OnCloseListener
@@ -56,7 +57,7 @@ public class DestinationActivity extends AppCompatActivity
                 intent.putExtra("place", place.getName().toString());
                 intent.putExtra("address", place.getAddress().toString());
                 intent.putExtra("position", position);
-                setResult(1, intent);
+                setResult(RequestCode.SEARCH_DESTINATION, intent);
                 finish();
             }
 
