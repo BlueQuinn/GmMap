@@ -124,7 +124,6 @@ public class DirectionActivity extends AppCompatActivity
 
             latLng[requestCode] = data.getParcelableExtra("position");
 
-
             BitmapDescriptor icon;
             if (requestCode == 0)
             {
@@ -133,13 +132,6 @@ public class DirectionActivity extends AppCompatActivity
             else
             {
                 icon = BitmapDescriptorFactory.fromResource(R.drawable.flag);
-                /*Drawable circle = getResources().getDrawable(R.drawable.marker);
-                Canvas canvas = new Canvas();
-                Bitmap bitmap = Bitmap.createBitmap(circle.getIntrinsicWidth(), circle.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-                canvas.setBitmap(bitmap);
-                circle.setBounds(0, 0, circle.getIntrinsicWidth(), circle.getIntrinsicHeight());
-                circle.draw(canvas);
-                icon = BitmapDescriptorFactory.fromBitmap(bitmap);*/
             }
             if (marker[requestCode] == null)
             {
@@ -227,20 +219,29 @@ public class DirectionActivity extends AppCompatActivity
             case R.id.txtFrom:
                 startActivityForResult(new Intent(this, DestinationActivity.class).putExtra("address", textView[0].getText().toString()), 0);
                 break;
+
             case R.id.txtTo:
                 startActivityForResult(new Intent(this, DestinationActivity.class).putExtra("address", textView[1].getText().toString()), 1);
                 break;
+
             case R.id.btnBack:
                 finish();
+
             case R.id.btnReverse:
                 if (textView[0].getText().length() > 0 && textView[1].getText().length() > 0)
                 {
                     String tmp = textView[0].getText().toString();
                     textView[0].setText(textView[1].getText());
                     textView[1].setText(tmp);
-                    marker[0].setPosition(latLng[1]);
-                    marker[1].setPosition(latLng[0]);
-                    navigate(latLng[1], latLng[0]);
+
+                    double tmpLat = latLng[0].latitude;
+                    double tmpLng = latLng[0].longitude;
+                    latLng[0] = new LatLng(latLng[1].latitude,  latLng[1].longitude);
+                    latLng[1] = new LatLng(tmpLat,  tmpLng);
+
+                    marker[0].setPosition(latLng[0]);
+                    marker[1].setPosition(latLng[1]);
+                    navigate(latLng[0], latLng[1]);
                 }
                 break;
         }
