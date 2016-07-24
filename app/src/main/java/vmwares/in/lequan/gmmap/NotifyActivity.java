@@ -3,6 +3,7 @@ package vmwares.in.lequan.gmmap;
 import android.content.DialogInterface;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.provider.Telephony;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -65,6 +67,19 @@ public class NotifyActivity extends AppCompatActivity implements View.OnClickLis
 
         tvAddress.setText("Bạn đang ở " + address);
         btnNotify.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT < 16) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+        else {
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
     }
 
     float getDistance(double lat1, double lng1, double lat2, double lng2)
